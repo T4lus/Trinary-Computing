@@ -1,4 +1,3 @@
-
 /*
 **
 ** Made by T4lus
@@ -207,30 +206,32 @@ public:
 		return *this;
 	}
 
-	static Trit INC(Trit t1) {
+	static Trit INC(Trit &t1) {
 		switch (t1.m_ch) {
-		case 'F':
-			return 'U';
-		case 'U':
-			return 'T';
-		case 'T':
-			return 'F';
+			case 'F':
+				t1 = 'U';
+			case 'U':
+				t1 = 'T';
+			case 'T':
+				t1 = 'F';
 		}
 		assert(false);
-		return 'U';
+		t1 = 'U';
+		return t1;
 	}
 
-	static Trit DEC(Trit t1) {
+	static Trit DEC(Trit &t1) {
 		switch (t1.m_ch) {
-		case 'F':
-			return 'T';
-		case 'U':
-			return 'F';
-		case 'T':
-			return 'U';
+			case 'F':
+				t1 = 'T';
+			case 'U':
+				t1 = 'F';
+			case 'T':
+				t1 = 'U';
 		}
 		assert(false);
-		return 'U';
+		t1 = 'U';
+		return t1;
 	}
 
 private:

@@ -62,8 +62,7 @@ public:
 		int cch = strlen(sz);
 		assert(cch <= CTRIT);
 		int itrit = 0;
-		while (cch > 0)
-		{
+		while (cch > 0) {
 			--cch;
 			rgdigit[itrit] = sz[cch];
 			++itrit;
@@ -72,18 +71,15 @@ public:
 
 	int to_int() {
 		int iret = 0;
-		for (int idigit = CTRIT - 1; idigit >= 0; --idigit)
-		{
+		for (int idigit = CTRIT - 1; idigit >= 0; --idigit) {
 			iret *= 3;
-			switch ((char)rgdigit[idigit])
-			{
-			case 'T':
-				iret++;
-				break;
-
-			case 'F':
-				iret--;
-				break;
+			switch ((char)rgdigit[idigit]) {
+				case 'T':
+					iret++;
+					break;
+				case 'F':
+					iret--;
+					break;
 			}
 		}
 		return iret;
