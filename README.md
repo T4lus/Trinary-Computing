@@ -2,6 +2,8 @@
 
 here is the trello about the current Dev : https://trello.com/b/lH9pM96o/trinary-dev
 
+Ask me gitter to get involved in this project
+
 ## About Ternary
 Yes - No - Maybe? this is how many people think and it has been said that the human brain is a ternary device. 
 
@@ -16,4 +18,6 @@ F -> False
 
 
 ## Data, Infos, Link
+https://dev.to/buntine/the-balanced-ternary-machines-of-soviet-russia
+
 http://homepage.divms.uiowa.edu/~jones/ternary/
