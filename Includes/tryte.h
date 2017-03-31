@@ -148,19 +148,17 @@ public:
 		return true;
 	}
 
-	/*
-	** TODO
-	*/
-	static Tryte SHR(Tryte &t1) {
-		t1++;
+	static Tryte SHR(Tryte &t1, unsigned int nb) {
+		std::string start = t1.str().substr(0, t1.str().size()-nb );
+		start.insert(0, nb, 'U');
+		t1 = start.c_str();
 		return t1;
 	}
 
-	/*
-	** TODO
-	*/
-	static Tryte SHL(Tryte &t1) {
-		t1++;
+	static Tryte SHL(Tryte &t1, unsigned int nb) {
+		std::string start = t1.str().substr( nb, t1.str().size() );
+		start.append(nb, 'U');
+		t1 = start.c_str();
 		return t1;
 	}
 

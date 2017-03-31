@@ -99,25 +99,14 @@ int main(int argc, char* argv[])
 	}
 
 	std::cout << std::endl;
-	std::cout << " SHR(T) \t\t\t SHL(T)" << std::endl;
-	Tryte t_test3 = 1;
-	Tryte t_test4 = "TUUUUUUUU";
-	std::cout << t_test3.str() << " : " << t_test3.to_int() << "\t\t" << t_test4.str() << " : " << t_test4.to_int() << std::endl;
+	std::cout << " SHL \t\t SHR" << std::endl;
+	Tryte t_test3 = "UUUUUUUTF";
+	Tryte t_test4 = "TFUUUUUUU";
+	std::cout << t_test3.str() << "\t" << t_test4.str() << std::endl;
 	for (int i = 0; i < 10; i++) {
-		Tryte::SHR(t_test3);
-		Tryte::SHL(t_test4);
-		std::cout << t_test3.str() << " : " << t_test3.to_int() << "\t\t" << t_test4.str() << " : " << t_test4.to_int() << std::endl;
-	}
-
-	std::cout << std::endl;
-	std::cout << " SHR(F) \t\t\t SHL(F)" << std::endl;
-	Tryte t_test5 = -1;
-	Tryte t_test6 = "FUUUUUUUU";
-	std::cout << t_test5.str() << " : " << t_test5.to_int() << "\t\t" << t_test6.str() << " : " << t_test6.to_int() << std::endl;
-	for (int i = 0; i < 10; i++) {
-		Tryte::SHR(t_test5);
-		Tryte::SHL(t_test6);
-		std::cout << t_test5.str() << " : " << t_test5.to_int() << "\t\t" << t_test6.str() << " : " << t_test6.to_int() << std::endl;
+		Tryte::SHL(t_test3, 1);
+		Tryte::SHR(t_test4, 1);
+		std::cout << t_test3.str() << "\t" << t_test4.str() << std::endl;
 	}
 
 	return 0;
