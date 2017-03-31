@@ -18,4 +18,5 @@ F -> False
 
 
 ## Data, Infos, Link
+https://dev.to/buntine/the-balanced-ternary-machines-of-soviet-russia
 http://homepage.divms.uiowa.edu/~jones/ternary/
