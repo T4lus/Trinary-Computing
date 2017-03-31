@@ -1,6 +1,7 @@
 # Trinary-Computing
 
 here is the trello about the current Dev : https://trello.com/b/lH9pM96o/trinary-dev
+
 Ask me gitter to get involved in this project
 
 ## About Ternary
