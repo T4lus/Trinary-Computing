@@ -215,8 +215,6 @@ public:
 			case 'T':
 				t1 = 'F';
 		}
-		assert(false);
-		t1 = 'U';
 		return t1;
 	}
 
@@ -229,8 +227,6 @@ public:
 			case 'T':
 				t1 = 'U';
 		}
-		assert(false);
-		t1 = 'U';
 		return t1;
 	}
 
