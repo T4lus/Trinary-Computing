@@ -99,14 +99,14 @@ int main(int argc, char* argv[])
 	}
 
 	std::cout << std::endl;
-	std::cout << " SHL \t\t SHR" << std::endl;
-	Tryte t_test3 = "UUUUUUUTF";
-	Tryte t_test4 = "TFUUUUUUU";
-	std::cout << t_test3.str() << "\t" << t_test4.str() << std::endl;
+	std::cout << " SHL \t\t\t SHR" << std::endl;
+	Tryte t_test3 = "UUUUUUUUT";
+	Tryte t_test4 = "TUUUUUUUU";
+	std::cout << t_test3.str() << " : " << t_test3.to_int() << "\t\t" << t_test4.str() << " : " << t_test4.to_int() << std::endl;
 	for (int i = 0; i < 10; i++) {
 		Tryte::SHL(t_test3, 1);
 		Tryte::SHR(t_test4, 1);
-		std::cout << t_test3.str() << "\t" << t_test4.str() << std::endl;
+		std::cout << t_test3.str() << " : " << t_test3.to_int() << "\t\t" << t_test4.str() << " : " << t_test4.to_int() << std::endl;
 	}
 
 	return 0;

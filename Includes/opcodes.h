@@ -13,7 +13,8 @@
 enum OPCODES : int
 {
 	// Arithmetic + Logic
-	NONE	= -1,	// 0000T
+	NOP		= -1,	// 0000T
+	HALT	= 0,
 	MOV		= 1,
 	ADD		= 10,
 	SUB		= 14,
