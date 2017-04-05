@@ -12,8 +12,9 @@
 #ifndef TRASM_H
 #define TRASM_H
 
-#include "opcodes.h"
 #include "trit.h"
+#include "tword.h"
 #include "tryte.h"
+#include "tryble.h"
 
 #endif

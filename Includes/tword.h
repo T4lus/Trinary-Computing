@@ -1,14 +1,14 @@
 /*
 **
 ** Made by T4lus
-** Trinary Tryte Implementation
+** Trinary TWord Implementation
 ** TUF syntax
-** 1 Tryte -> 9 Trit
+** 1 TWord -> 27 Trit
 ** 
 */
 
-#ifndef TRYTE_H
-#define TRYTE_H
+#ifndef TWORD_H
+#define TWORD_H
 
 #include <algorithm>
 #include <string>
@@ -18,19 +18,19 @@
 
 #include "trinary.h"
 
-class Tryte {
+class TWord {
 public:
-	static const int CTRIT = 9;
-	static const int Tryte_MAX = 9841;
+	static const int CTRIT = 27;
+	static const int TWord_MAX = 9841;
 
-	Tryte() {
+	TWord() {
 	}
 
-	Tryte(int int8) {
+	TWord(int int8) {
 		int ival = int8;
 		bool fneg = ival < 0;
 
-		if (abs(int8) >= Tryte_MAX)
+		if (abs(int8) >= TWord_MAX)
 			ival = 0;
 
 		if (fneg)
@@ -58,7 +58,7 @@ public:
 			*this = ~(*this);
 	}
 
-	Tryte(const char *sz) {
+	TWord(const char *sz) {
 		int cch = strlen(sz);
 		assert(cch <= CTRIT);
 		int itrit = 0;
@@ -90,39 +90,39 @@ public:
 		return rgdigit[idx];
 	}
 
-	Tryte operator~() {
-		Tryte Tryte;
+	TWord operator~() {
+		TWord TWord;
 		for (int idigit = 0; idigit < CTRIT; ++idigit)
 		{
-			Tryte.rgdigit[idigit] = ~rgdigit[idigit];
+			TWord.rgdigit[idigit] = ~rgdigit[idigit];
 		}
-		return Tryte;
+		return TWord;
 	}
 
-	Tryte operator&(Tryte &other) {
-		Tryte Tryte;
+	TWord operator&(TWord &other) {
+		TWord TWord;
 		for (int idigit = 0; idigit < CTRIT; ++idigit)
-			Tryte[idigit] = rgdigit[idigit] & other.rgdigit[idigit];
-		return Tryte;
+			TWord[idigit] = rgdigit[idigit] & other.rgdigit[idigit];
+		return TWord;
 	}
-	Tryte operator|(Tryte &other) {
-		Tryte Tryte;
+	TWord operator|(TWord &other) {
+		TWord TWord;
 		for (int idigit = 0; idigit < CTRIT; ++idigit)
-			Tryte[idigit] = rgdigit[idigit] | other.rgdigit[idigit];
-		return Tryte;
+			TWord[idigit] = rgdigit[idigit] | other.rgdigit[idigit];
+		return TWord;
 	}
-	Tryte operator^(Tryte &other) {
-		Tryte Tryte;
+	TWord operator^(TWord &other) {
+		TWord TWord;
 		for (int idigit = 0; idigit < CTRIT; ++idigit)
-			Tryte[idigit] = rgdigit[idigit] ^ other.rgdigit[idigit];
-		return Tryte;
+			TWord[idigit] = rgdigit[idigit] ^ other.rgdigit[idigit];
+		return TWord;
 	}
 
-	Tryte operator+(Tryte &other) {
-		return Tryte(to_int() + other.to_int());
+	TWord operator+(TWord &other) {
+		return TWord(to_int() + other.to_int());
 	}
 
-	Tryte operator++(int) {
+	TWord operator++(int) {
 		for (int idigit = 0; idigit < CTRIT; ++idigit) {
 			rgdigit[idigit]++;
 			if ((char)rgdigit[idigit] != 'F')
@@ -131,7 +131,7 @@ public:
 		return *this;
 	}
 
-	Tryte operator--(int) {
+	TWord operator--(int) {
 		for (int idigit = 0; idigit < CTRIT; ++idigit) {
 			rgdigit[idigit]--;
 			if ((char)rgdigit[idigit] != 'T')
@@ -140,7 +140,7 @@ public:
 		return *this;
 	}
 
-	bool operator==(Tryte &other) {
+	bool operator==(TWord &other) {
 		for (int idigit = 0; idigit < CTRIT; ++idigit) {
 			if (((char)rgdigit[idigit] != (char)other.rgdigit[idigit]))
 				return false;
@@ -148,14 +148,14 @@ public:
 		return true;
 	}
 
-	static Tryte SHR(Tryte &t1, unsigned int nb) {
+	static TWord SHR(TWord &t1, unsigned int nb) {
 		std::string start = t1.str().substr(0, t1.str().size()-nb );
 		start.insert(0, nb, 'U');
 		t1 = start.c_str();
 		return t1;
 	}
 
-	static Tryte SHL(Tryte &t1, unsigned int nb) {
+	static TWord SHL(TWord &t1, unsigned int nb) {
 		std::string start = t1.str().substr( nb, t1.str().size() );
 		start.append(nb, 'U');
 		t1 = start.c_str();

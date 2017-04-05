@@ -1,14 +1,14 @@
 /*
 **
 ** Made by T4lus
-** Trinary Tryte Implementation
+** Trinary Tryble Implementation
 ** TUF syntax
-** 1 Tryte -> 9 Trit
+** 1 Tryble -> 3 Trit
 ** 
 */
 
-#ifndef TRYTE_H
-#define TRYTE_H
+#ifndef TRYBLE_H
+#define TRYBLE_H
 
 #include <algorithm>
 #include <string>
@@ -18,19 +18,19 @@
 
 #include "trinary.h"
 
-class Tryte {
+class Tryble {
 public:
-	static const int CTRIT = 9;
-	static const int Tryte_MAX = 9841;
-
-	Tryte() {
+	static const int CTRIT = 3;
+	static const int Tryble_MAX = 13;
+	
+	Tryble() {
 	}
 
-	Tryte(int int8) {
+	Tryble(int int8) {
 		int ival = int8;
 		bool fneg = ival < 0;
 
-		if (abs(int8) >= Tryte_MAX)
+		if (abs(int8) >= Tryble_MAX)
 			ival = 0;
 
 		if (fneg)
@@ -58,7 +58,7 @@ public:
 			*this = ~(*this);
 	}
 
-	Tryte(const char *sz) {
+	Tryble(const char *sz) {
 		int cch = strlen(sz);
 		assert(cch <= CTRIT);
 		int itrit = 0;
@@ -90,39 +90,39 @@ public:
 		return rgdigit[idx];
 	}
 
-	Tryte operator~() {
-		Tryte Tryte;
+	Tryble operator~() {
+		Tryble Tryble;
 		for (int idigit = 0; idigit < CTRIT; ++idigit)
 		{
-			Tryte.rgdigit[idigit] = ~rgdigit[idigit];
+			Tryble.rgdigit[idigit] = ~rgdigit[idigit];
 		}
-		return Tryte;
+		return Tryble;
 	}
 
-	Tryte operator&(Tryte &other) {
-		Tryte Tryte;
+	Tryble operator&(Tryble &other) {
+		Tryble Tryble;
 		for (int idigit = 0; idigit < CTRIT; ++idigit)
-			Tryte[idigit] = rgdigit[idigit] & other.rgdigit[idigit];
-		return Tryte;
+			Tryble[idigit] = rgdigit[idigit] & other.rgdigit[idigit];
+		return Tryble;
 	}
-	Tryte operator|(Tryte &other) {
-		Tryte Tryte;
+	Tryble operator|(Tryble &other) {
+		Tryble Tryble;
 		for (int idigit = 0; idigit < CTRIT; ++idigit)
-			Tryte[idigit] = rgdigit[idigit] | other.rgdigit[idigit];
-		return Tryte;
+			Tryble[idigit] = rgdigit[idigit] | other.rgdigit[idigit];
+		return Tryble;
 	}
-	Tryte operator^(Tryte &other) {
-		Tryte Tryte;
+	Tryble operator^(Tryble &other) {
+		Tryble Tryble;
 		for (int idigit = 0; idigit < CTRIT; ++idigit)
-			Tryte[idigit] = rgdigit[idigit] ^ other.rgdigit[idigit];
-		return Tryte;
+			Tryble[idigit] = rgdigit[idigit] ^ other.rgdigit[idigit];
+		return Tryble;
 	}
 
-	Tryte operator+(Tryte &other) {
-		return Tryte(to_int() + other.to_int());
+	Tryble operator+(Tryble &other) {
+		return Tryble(to_int() + other.to_int());
 	}
 
-	Tryte operator++(int) {
+	Tryble operator++(int) {
 		for (int idigit = 0; idigit < CTRIT; ++idigit) {
 			rgdigit[idigit]++;
 			if ((char)rgdigit[idigit] != 'F')
@@ -131,7 +131,7 @@ public:
 		return *this;
 	}
 
-	Tryte operator--(int) {
+	Tryble operator--(int) {
 		for (int idigit = 0; idigit < CTRIT; ++idigit) {
 			rgdigit[idigit]--;
 			if ((char)rgdigit[idigit] != 'T')
@@ -140,7 +140,7 @@ public:
 		return *this;
 	}
 
-	bool operator==(Tryte &other) {
+	bool operator==(Tryble &other) {
 		for (int idigit = 0; idigit < CTRIT; ++idigit) {
 			if (((char)rgdigit[idigit] != (char)other.rgdigit[idigit]))
 				return false;
@@ -148,14 +148,14 @@ public:
 		return true;
 	}
 
-	static Tryte SHR(Tryte &t1, unsigned int nb) {
+	static Tryble SHR(Tryble &t1, unsigned int nb) {
 		std::string start = t1.str().substr(0, t1.str().size()-nb );
 		start.insert(0, nb, 'U');
 		t1 = start.c_str();
 		return t1;
 	}
 
-	static Tryte SHL(Tryte &t1, unsigned int nb) {
+	static Tryble SHL(Tryble &t1, unsigned int nb) {
 		std::string start = t1.str().substr( nb, t1.str().size() );
 		start.append(nb, 'U');
 		t1 = start.c_str();
@@ -177,6 +177,7 @@ public:
 
 private:
 	Trit rgdigit[CTRIT + 1];
+
 };
 
 #endif

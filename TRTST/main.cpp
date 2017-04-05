@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
 	std::cout << std::endl;
 	std::cout << "Tryte test : " << std::endl;
 	
-	Tryte t_test = "FFFFFFFFF";
+	Tryte t_test = 90;
 	std::cout << t_test.str() << " : " << t_test.to_int() << std::endl;
 	t_test = "UUUUUUUUU";
 	std::cout << t_test.str() << " : " << t_test.to_int() << std::endl;
@@ -108,6 +108,18 @@ int main(int argc, char* argv[])
 		Tryte::SHR(t_test4, 1);
 		std::cout << t_test3.str() << " : " << t_test3.to_int() << "\t\t" << t_test4.str() << " : " << t_test4.to_int() << std::endl;
 	}
+
+	std::cout << std::endl;
+	std::cout << "Tryble test : " << std::endl;
+	
+	Tryble tr_test = "FFF";
+	std::cout << tr_test.str() << " : " << tr_test.to_int() << std::endl;
+	tr_test = "UUU";
+	std::cout << tr_test.str() << " : " << tr_test.to_int() << std::endl;
+	tr_test = "TTT";
+	std::cout << tr_test.str() << " : " << tr_test.to_int() << std::endl;
+	tr_test = "TUT";
+	std::cout << tr_test.str() << " : " << tr_test.to_int() << std::endl;
 
 	return 0;
 }
