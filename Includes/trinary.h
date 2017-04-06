@@ -13,8 +13,8 @@
 #define TRASM_H
 
 #include "trit.h"
-#include "tword.h"
-#include "tryte.h"
 #include "tryble.h"
+#include "tryte.h"
+#include "tword.h"
 
 #endif

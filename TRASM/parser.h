@@ -13,39 +13,9 @@
 #include <sstream>
 #include <regex>
 
-#include "trinary.h"
+#include <tryte.h>
+
 #include "opcodes.h"
-
-std::string trim(const std::string& str, const std::string& whitespace = " \t") {
-    const auto strBegin = str.find_first_not_of(whitespace);
-    if (strBegin == std::string::npos)
-        return ""; // no content
-
-    const auto strEnd = str.find_last_not_of(whitespace);
-    const auto strRange = strEnd - strBegin + 1;
-
-    return str.substr(strBegin, strRange);
-}
-
-std::string reduce(const std::string& str, const std::string& fill = " ", const std::string& whitespace = " \t") {
-    // trim first
-    auto result = trim(str, whitespace);
-
-    // replace sub ranges
-    auto beginSpace = result.find_first_of(whitespace);
-    while (beginSpace != std::string::npos)
-    {
-        const auto endSpace = result.find_first_not_of(whitespace, beginSpace);
-        const auto range = endSpace - beginSpace;
-
-        result.replace(beginSpace, range, fill);
-
-        const auto newStart = beginSpace + fill.length();
-        beginSpace = result.find_first_of(whitespace, newStart);
-    }
-
-    return result;
-}
 
 enum opMapCol {
     lineNumber,
@@ -70,74 +40,49 @@ private:
 	map_t						byteMap;
 
 public:
-	Parser(std::string _inFile, std::string _outFile) {
-		this->inFile = _inFile;
-		this->outFile = _outFile;
-	}
+	Parser(std::string _inFile, std::string _outFile);
 	
-	int parse1() {
-		this->nbError = 0;
-		int lineNumber = 0;
-		std::cout << "Starting parse 1 ..." << std::endl;
+	int parse1();
+	int parse2();
+	int compile();
 
-		std::string line;
-		std::regex op_reg(OP_REGEX);
-		std::smatch m;
+	static std::vector<args_type_t> GetArgType(std::vector<std::string>);
 
-		std::ifstream infile(this->inFile.c_str());
-		while (std::getline(infile, line)) {
-			lineNumber++;
-			line = line.substr(0, line.find("#"));
-			if (line == "")
-				continue;
-			line = reduce(line);
+	static std::vector<Tryte> NOP(std::vector<std::string>);	
+	static std::vector<Tryte> HLT(std::vector<std::string>);
+	static std::vector<Tryte> MOV(std::vector<std::string>);
+	static std::vector<Tryte> DB(std::vector<std::string>);
+	
+	static std::vector<Tryte> CMP(std::vector<std::string>);
+	
+	static std::vector<Tryte> JMP(std::vector<std::string>);
+	static std::vector<Tryte> JC(std::vector<std::string>);
+	static std::vector<Tryte> JNC(std::vector<std::string>);
+	static std::vector<Tryte> JZ(std::vector<std::string>);
+	static std::vector<Tryte> JNZ(std::vector<std::string>);
+	
+	static std::vector<Tryte> PUSH(std::vector<std::string>);
+	static std::vector<Tryte> POP(std::vector<std::string>);
+	static std::vector<Tryte> CALL(std::vector<std::string>);
+	static std::vector<Tryte> RET(std::vector<std::string>);
 
-			if (regex_match(line, m, op_reg)) {
-				std::vector<std::string> ops;
-				ops.push_back(std::to_string(lineNumber));
-			    for (int i = 1; i < m.size(); i++) {
-			    	if (m[i] != "") {
-			    		ops.push_back(m[i]);
-			    	}
-			    }
-			    opMap.push_back(ops);
-			}
-		}
+	static std::vector<Tryte> INC(std::vector<std::string>);
+	static std::vector<Tryte> DEC(std::vector<std::string>);
+	static std::vector<Tryte> ADD(std::vector<std::string>);
+	static std::vector<Tryte> SUB(std::vector<std::string>);
+	static std::vector<Tryte> MUL(std::vector<std::string>);
+	static std::vector<Tryte> DIV(std::vector<std::string>);
 
-		for (auto op : opMap) {
-			for (auto tab : op_tab) {
-				if (!tab.opcode.compare(op[opMapCol::mnemonic])) {
-					std::cout << op[opMapCol::mnemonic] << "\t : "; 
-					std::vector<Tryte> opmem = tab.fct(op);
+	static std::vector<Tryte> AND(std::vector<std::string>);
+	static std::vector<Tryte> OR(std::vector<std::string>);
+	static std::vector<Tryte> XOR(std::vector<std::string>);
 
-					for (auto mem : opmem) {
-						std::cout << mem.str() << " ";
-					}
-					std::cout << std::endl;
-				}
-			}
-		}
+	static std::vector<Tryte> NOT(std::vector<std::string>);
+	static std::vector<Tryte> NOTT(std::vector<std::string>);
+	static std::vector<Tryte> NOTF(std::vector<std::string>);
 
-		std::cout << "Parse 1 done, " << this->nbError << " error(s) detected" << std::endl;		
-		if (this->nbError)
-			return 1;
-		return 0;
-	}
-
-	int parse2() {
-		this->nbError = 0;
-		std::cout << "Starting parse 2 ..." << std::endl;
-
-		std::cout << "Parse 2 done, " << this->nbError << " error(s) detected" << std::endl;		
-		if (this->nbError)
-			return 1;
-		return 0;
-	}
-
-	int compile() {
-
-		return 0;
-	}
+	static std::vector<Tryte> SHL(std::vector<std::string>);
+	static std::vector<Tryte> SHR(std::vector<std::string>);
 	
 };
 

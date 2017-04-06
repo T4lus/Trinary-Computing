@@ -3,8 +3,10 @@
 
 	JMP start
 hello: 
-	DB "Hello World!" 		#Variable
+	DB "Hello\t \"world\"" 		#Variable
 	DB 0					#string terminator
+	DB 0xff
+	DB 600
 
 start:
 	MOV C, hello 			#Point to var 
@@ -27,3 +29,5 @@ print:						#print(C:*from, D:*to)
 	POP B
 	POP A
 	RET
+
+	MOV A, C

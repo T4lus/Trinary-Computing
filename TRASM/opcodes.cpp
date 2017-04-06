@@ -1,250 +1,145 @@
 
 #include "opcodes.h"
+#include "parser.h"
+
+
+std::map<std::string, Tryte> register_tab = {
+	{"A", 1},
+	{"B", 2},
+	{"C", 3},
+	{"D", 4}
+};
 
 // {MNEMONIC, ARGS NUMBER, MODES, TRYTE VALUE, PARSE FUNCTION}
 std::vector<op_t> op_tab = {
-	{"NOP", 0, {}, -1, &Opcodes::NOP},
-	{"HLT", 0, {}, 0, &Opcodes::HLT},
-	{"MOV", 2, {T_REGISTER | T_ADDRESS, T_REGISTER | T_ADDRESS | T_CONSTANT}, 1, &Opcodes::MOV},
-	{"DB", 1, {T_CONSTANT}, 5, &Opcodes::DB},
+	{"NOP", 0, {}, -1, &Parser::NOP},
+	{"HLT", 0, {}, 0, &Parser::HLT},
+	{"MOV", 2, {T_REGISTER | T_ADDRESS, T_REGISTER | T_ADDRESS | T_CONSTANT}, 1, &Parser::MOV},
+	{"DB", 1, {T_CONSTANT}, 10, &Parser::DB},
 
-	{"CMP", 2, {T_REGISTER, T_REGISTER | T_ADDRESS | T_CONSTANT}, 20, &Opcodes::CMP},
+	{"CMP", 2, {T_REGISTER, T_REGISTER | T_ADDRESS | T_CONSTANT}, 20, &Parser::CMP},
 	
-	{"JMP", 1, {T_ADDRESS}, 30, &Opcodes::JMP},
-	{"JC", 1, {T_ADDRESS}, 31, &Opcodes::JC},
-	{"JNC", 1, {T_ADDRESS}, 32, &Opcodes::JNC},
-	{"JZ", 1, {T_ADDRESS}, 33, &Opcodes::JZ},
-	{"JNZ", 1, {T_ADDRESS}, 34, &Opcodes::JNZ},
+	{"JMP", 1, {T_ADDRESS}, 30, &Parser::JMP},
+	{"JC", 1, {T_ADDRESS}, 31, &Parser::JC},
+	{"JNC", 1, {T_ADDRESS}, 32, &Parser::JNC},
+	{"JZ", 1, {T_ADDRESS}, 33, &Parser::JZ},
+	{"JNZ", 1, {T_ADDRESS}, 34, &Parser::JNZ},
 
-	{"PUSH", 1, {T_REGISTER | T_ADDRESS | T_CONSTANT}, 50, &Opcodes::PUSH},
-	{"POP", 1, {T_REGISTER}, 54, &Opcodes::POP},
-	{"CALL", 1, {T_ADDRESS}, 55, &Opcodes::CALL},
-	{"RET", 0, {}, 57, &Opcodes::RET},
+	{"PUSH", 1, {T_REGISTER | T_ADDRESS | T_CONSTANT}, 50, &Parser::PUSH},
+	{"POP", 1, {T_REGISTER}, 54, &Parser::POP},
+	{"CALL", 1, {T_ADDRESS}, 55, &Parser::CALL},
+	{"RET", 0, {}, 57, &Parser::RET},
 	
-	{"INC", 1, {T_REGISTER}, 60, &Opcodes::INC},
-	{"DEC", 1, {T_REGISTER}, 65, &Opcodes::DEC},
-	{"ADD", 2, {T_REGISTER, T_REGISTER | T_ADDRESS | T_CONSTANT}, 70, &Opcodes::ADD},
-	{"SUB", 2, {T_REGISTER, T_REGISTER | T_ADDRESS | T_CONSTANT}, 75, &Opcodes::SUB},
-	{"MUL", 1, {T_REGISTER | T_ADDRESS | T_CONSTANT}, 80, &Opcodes::MUL},
-	{"DIV", 1, {T_REGISTER | T_ADDRESS | T_CONSTANT}, 85, &Opcodes::DIV},
+	{"INC", 1, {T_REGISTER}, 60, &Parser::INC},
+	{"DEC", 1, {T_REGISTER}, 65, &Parser::DEC},
+	{"ADD", 2, {T_REGISTER, T_REGISTER | T_ADDRESS | T_CONSTANT}, 70, &Parser::ADD},
+	{"SUB", 2, {T_REGISTER, T_REGISTER | T_ADDRESS | T_CONSTANT}, 75, &Parser::SUB},
+	{"MUL", 1, {T_REGISTER | T_ADDRESS | T_CONSTANT}, 80, &Parser::MUL},
+	{"DIV", 1, {T_REGISTER | T_ADDRESS | T_CONSTANT}, 85, &Parser::DIV},
 
-	{"AND", 2, {T_REGISTER, T_REGISTER | T_ADDRESS | T_CONSTANT}, 90, &Opcodes::AND},
-	{"OR", 2, {T_REGISTER, T_REGISTER | T_ADDRESS | T_CONSTANT}, 95, &Opcodes::OR},
-	{"XOR", 2, {T_REGISTER, T_REGISTER | T_ADDRESS | T_CONSTANT}, 100, &Opcodes::XOR},
+	{"AND", 2, {T_REGISTER, T_REGISTER | T_ADDRESS | T_CONSTANT}, 90, &Parser::AND},
+	{"OR", 2, {T_REGISTER, T_REGISTER | T_ADDRESS | T_CONSTANT}, 95, &Parser::OR},
+	{"XOR", 2, {T_REGISTER, T_REGISTER | T_ADDRESS | T_CONSTANT}, 100, &Parser::XOR},
 
-	{"NOT", 1, {T_REGISTER}, 105, &Opcodes::NOT},													//STI (U -> U)
-	{"NOTT", 1, {T_REGISTER}, 106, &Opcodes::NOTT},													//PTI (U -> T)
-	{"NOTF", 1, {T_REGISTER}, 107, &Opcodes::NOTF},													//NTI (U -> F)
+	{"NOT", 1, {T_REGISTER}, 105, &Parser::NOT},													//STI (U -> U)
+	{"NOTT", 1, {T_REGISTER}, 106, &Parser::NOTT},													//PTI (U -> T)
+	{"NOTF", 1, {T_REGISTER}, 107, &Parser::NOTF},													//NTI (U -> F)
 
-	{"SHL", 2, {T_REGISTER, T_REGISTER | T_ADDRESS | T_CONSTANT}, 110, &Opcodes::SHL},
-	{"SHR", 2, {T_REGISTER, T_REGISTER | T_ADDRESS | T_CONSTANT}, 115, &Opcodes::SHR}
+	{"SHL", 2, {T_REGISTER, T_REGISTER | T_ADDRESS | T_CONSTANT}, 110, &Parser::SHL},
+	{"SHR", 2, {T_REGISTER, T_REGISTER | T_ADDRESS | T_CONSTANT}, 115, &Parser::SHR}
 };
 
-std::vector<args_type_t> GetArgType(std::vector<std::string> _args) {
-	std::vector<args_type_t> args_type;
+/*
+NONE: 0,
+MOV REG TO REG: 1,
+MOV ADDRESS TO REG: 2,
+MOV REGADDRESS TO REG: 3,
+MOV REG TO ADDRESS: 4,
+MOV REG TO REGADDRESS: 5,
+MOV NUMBER TO_REG: 6,
+MOV NUMBER TO_ADDRESS: 7,
+MOV NUMBER TO_REGADDRESS: 8,
 
-	for (auto arg : _args) {
-		if (!arg.compare('A') || !arg.compare('B') || !arg.compare('C') || !arg.compare('D'))
-			args_type.push_back(T_REGISTER);
-		if (!arg.compare(0, 1, '[') && !arg.compare(arg.size()-1, 1, ']')) {
-			args_type.push_back(T_ADDRESS);
-		}
-	}
+ADD_REG_TO_REG: 10,
+ADD_REGADDRESS_TO_REG: 11,
+ADD_ADDRESS_TO_REG: 12,
+ADD_NUMBER_TO_REG: 13,
 
-	return args_type;
-}
+SUB_REG_FROM_REG: 14,
+SUB_REGADDRESS_FROM_REG: 15,
+SUB_ADDRESS_FROM_REG: 16,
+SUB_NUMBER_FROM_REG: 17,
 
-std::vector<Tryte> Opcodes::NOP(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {-1};
+INC REG: 18,
+DEC REG: 19,
 
-	return memTab;
-}
-std::vector<Tryte> Opcodes::HLT(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {0};
+CMP_REG_WITH_REG: 20,
+CMP_REGADDRESS_WITH_REG: 21,
+CMP_ADDRESS_WITH_REG: 22,
+CMP_NUMBER_WITH_REG: 23,
 
-	return memTab;
-}
+JMP_REGADDRESS: 30,
+JMP_ADDRESS: 31,
 
-std::vector<Tryte> Opcodes::MOV(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	int opValue = 1;
+JC_REGADDRESS: 32,
+JC_ADDRESS: 33,
+
+JNC_REGADDRESS: 34,
+JNC_ADDRESS: 35,
+
+JZ_REGADDRESS: 36,
+JZ_ADDRESS: 37,
+
+JNZ_REGADDRESS: 38,
+JNZ_ADDRESS: 39,
 
 
+PUSH_REG: 50,
+PUSH_REGADDRESS: 51,
+PUSH_ADDRESS: 52,
+PUSH_NUMBER: 53,
 
-	memTab.push_back(opValue);
+POP_REG: 54,
 
-	return memTab;
-}
-std::vector<Tryte> Opcodes::DB(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {5};
+CALL_REGADDRESS: 55,
+CALL_ADDRESS: 56,
 
-	return memTab;
-}
+RET: 57,
 
-std::vector<Tryte> Opcodes::CMP(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {20};
+MUL_REG: 60,
+MUL_REGADDRESS: 61,
+MUL_ADDRESS: 62,
+MUL_NUMBER: 63,
 
-	return memTab;
-}
+DIV_REG: 64,
+DIV_REGADDRESS: 65,
+DIV_ADDRESS: 66,
+DIV_NUMBER: 67,
 
-std::vector<Tryte> Opcodes::JMP(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {30};
+AND_REG_WITH_REG: 70,
+AND_REGADDRESS_WITH_REG: 71,
+AND_ADDRESS_WITH_REG: 72,
+AND_NUMBER_WITH_REG: 73,
 
-	memTab.push_back("FFFFFFFFF");
+OR_REG_WITH_REG: 74,
+OR_REGADDRESS_WITH_REG: 75,
+OR_ADDRESS_WITH_REG: 76,
+OR_NUMBER_WITH_REG: 77,
 
-	return memTab;
-}
-std::vector<Tryte> Opcodes::JC(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {31};
+XOR_REG_WITH_REG: 78,
+XOR_REGADDRESS_WITH_REG: 79,
+XOR_ADDRESS_WITH_REG: 80,
+XOR_NUMBER_WITH_REG: 81,
 
-	memTab.push_back("FFFFFFFFF");
+NOT_REG: 82,
 
-	return memTab;
-}
-std::vector<Tryte> Opcodes::JNC(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {32};
+SHL_REG_WITH_REG: 90,
+SHL_REGADDRESS_WITH_REG: 91,
+SHL_ADDRESS_WITH_REG: 92,
+SHL_NUMBER_WITH_REG: 93,
 
-	memTab.push_back("FFFFFFFFF");
-
-	return memTab;
-}
-std::vector<Tryte> Opcodes::JZ(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {33};
-
-	memTab.push_back("FFFFFFFFF");
-
-	return memTab;
-}
-std::vector<Tryte> Opcodes::JNZ(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {34};
-
-	memTab.push_back("FFFFFFFFF");
-
-	return memTab;
-}
-
-std::vector<Tryte> Opcodes::PUSH(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {50};
-
-	return memTab;
-}
-std::vector<Tryte> Opcodes::POP(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {54};
-
-	return memTab;
-}
-std::vector<Tryte> Opcodes::CALL(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {55};
-
-	memTab.push_back("FFFFFFFFF");
-	memTab.push_back("FFFFFFFFF");
-	memTab.push_back("FFFFFFFFF");
-
-	return memTab;
-}
-std::vector<Tryte> Opcodes::RET(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {57};
-
-	return memTab;
-}
-
-std::vector<Tryte> Opcodes::INC(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {60};
-
-	return memTab;
-}
-std::vector<Tryte> Opcodes::DEC(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {65};
-
-	return memTab;
-}
-std::vector<Tryte> Opcodes::ADD(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {70};
-
-	return memTab;
-}
-std::vector<Tryte> Opcodes::SUB(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {75};
-
-	return memTab;
-}
-std::vector<Tryte> Opcodes::MUL(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {80};
-
-	return memTab;
-}
-std::vector<Tryte> Opcodes::DIV(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {85};
-
-	return memTab;
-}
-
-std::vector<Tryte> Opcodes::AND(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {90};
-
-	return memTab;
-}
-std::vector<Tryte> Opcodes::OR(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {95};
-
-	return memTab;
-}
-std::vector<Tryte> Opcodes::XOR(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {100};
-
-	return memTab;
-}
-
-std::vector<Tryte> Opcodes::NOT(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {105};
-
-	return memTab;
-}
-std::vector<Tryte> Opcodes::NOTT(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {106};
-
-	return memTab;
-}
-std::vector<Tryte> Opcodes::NOTF(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {107};
-
-	return memTab;
-}
-
-std::vector<Tryte> Opcodes::SHL(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {110};
-
-	return memTab;
-}
-std::vector<Tryte> Opcodes::SHR(std::vector<std::string> _opMap) {
-	std::vector<Tryte> memTab;
-	memTab = {115};
-
-	return memTab;
-}
+SHR_REG_WITH_REG: 94,
+SHR_REGADDRESS_WITH_REG: 95,
+SHR_ADDRESS_WITH_REG: 96,
+SHR_NUMBER_WITH_REG: 97
+*/

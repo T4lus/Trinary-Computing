@@ -11,8 +11,6 @@
 
 #include <assert.h>
 
-#include "trinary.h"
-
 class Trit {
 public:
 	Trit() {

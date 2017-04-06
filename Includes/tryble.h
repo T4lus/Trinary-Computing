@@ -16,7 +16,7 @@
 #include <assert.h>
 #include <string.h>
 
-#include "trinary.h"
+#include <trit.h>
 
 class Tryble {
 public:
