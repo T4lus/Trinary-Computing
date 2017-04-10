@@ -1,0 +1,44 @@
+MOV A, B			#size 3
+MOV A, [B]			#size 3
+MOV A, [test]		#size 5
+MOV A, 0xff			#size 5
+MOV [A], B			#size 3
+MOV [test], A		#size 5
+MOV [test], 0xff	#size 7
+
+CMP A, B			#size 3
+CMP A, [B]			#size 3
+CMP A, [test]		#size 5
+CMP A, 0xff			#size 5
+
+JMP	[A]				#size 2
+JMP test			#size 4
+JC	[A]				#size 2
+JC test				#size 4
+JNC	[A]				#size 2
+JNC test			#size 4
+JUC	[A]				#size 2
+JUC test			#size 4
+JZ	[A]				#size 2
+JZ test				#size 4
+JNZ	[A]				#size 2
+JNZ test			#size 4
+JUZ	[A]				#size 2
+JUZ test			#size 4
+
+PUSH A				#size 2
+PUSH [A]			#size 2
+PUSH [test]			#size 4
+PUSH 0xff			#size 4
+
+POP A				#size 2
+CALL A				#size 2
+CALL [A]			#size 2 
+CALL [test]			#size 4
+RET					#size 1
+
+INC A				#size 2
+DEC A				#size 2
+
+test:
+	DB "Hello \"world\""

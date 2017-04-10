@@ -28,18 +28,10 @@ main(int argc, char* argv[])
 
     Parser *parser = new Parser(argv[1], argv[2]);
 
-    ret = parser->parse1();
+    ret = parser->parse();
     if (ret) {
         std::cout << "ASM abort !!!" << std::endl;
         return -1;
     }
-
-    ret = parser->parse2();
-    if (ret) {
-        std::cout << "ASM abort !!!" << std::endl;
-        return -1;
-    }
-
-    parser->compile();
 
 }

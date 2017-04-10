@@ -56,16 +56,14 @@ std::string fromRaw(std::string raw) {
 
 bool isInteger(const std::string & s) {
 	if(s.empty() || ((!isdigit(s[0])) && (s[0] != '-') && (s[0] != '+'))) 
-		return false ;
+		return false;
 
-	char * p ;
-	strtol(s.c_str(), &p, 10) ;
+	char * p;
+	strtol(s.c_str(), &p, 10);
 
-	return (*p == 0) ;
+	return *p == 0;
 }
 
 bool isHex(std::string const& s) {
-  return s.compare(0, 2, "0x") == 0
-	  && s.size() > 2
-	  && s.find_first_not_of("0123456789abcdefABCDEF", 2) == std::string::npos;
+  return s.compare(0, 2, "0x") == 0 && s.size() > 2 && s.find_first_not_of("0123456789abcdefABCDEF", 2) == std::string::npos;
 }

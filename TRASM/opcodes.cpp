@@ -3,7 +3,7 @@
 #include "parser.h"
 
 
-std::map<std::string, Tryte> register_tab = {
+std::map<std::string, int> register_tab = {
 	{"A", 1},
 	{"B", 2},
 	{"C", 3},
@@ -11,42 +11,44 @@ std::map<std::string, Tryte> register_tab = {
 };
 
 // {MNEMONIC, ARGS NUMBER, MODES, TRYTE VALUE, PARSE FUNCTION}
-std::vector<op_t> op_tab = {
-	{"NOP", 0, {}, -1, &Parser::NOP},
-	{"HLT", 0, {}, 0, &Parser::HLT},
-	{"MOV", 2, {T_REGISTER | T_ADDRESS, T_REGISTER | T_ADDRESS | T_CONSTANT}, 1, &Parser::MOV},
-	{"DB", 1, {T_CONSTANT}, 10, &Parser::DB},
+std::map<std::string, op_t> op_tab = {
+	{"NOP", {"NOP", 0, {}, -1, &Parser::NOP}},
+	{"HLT", {"HLT", 0, {}, 0, &Parser::HLT}},
+	{"MOV", {"MOV", 2, {}, 1, &Parser::MOV}},
+	{"DB",  {"DB",  1, {}, 10, &Parser::DB}},
 
-	{"CMP", 2, {T_REGISTER, T_REGISTER | T_ADDRESS | T_CONSTANT}, 20, &Parser::CMP},
+	{"CMP", {"CMP", 2, {}, 20, &Parser::CMP}},
 	
-	{"JMP", 1, {T_ADDRESS}, 30, &Parser::JMP},
-	{"JC", 1, {T_ADDRESS}, 31, &Parser::JC},
-	{"JNC", 1, {T_ADDRESS}, 32, &Parser::JNC},
-	{"JZ", 1, {T_ADDRESS}, 33, &Parser::JZ},
-	{"JNZ", 1, {T_ADDRESS}, 34, &Parser::JNZ},
+	{"JMP", {"JMP", 1, {}, 30, &Parser::JMP}},
+	{"JC",  {"JC",  1, {}, 32, &Parser::JC}},
+	{"JNC", {"JNC", 1, {}, 34, &Parser::JNC}},
+	{"JUC", {"JUC", 1, {}, 36, &Parser::JUC}},
+	{"JZ",  {"JZ",  1, {}, 38, &Parser::JZ}},
+	{"JNZ", {"JNZ", 1, {}, 40, &Parser::JNZ}},
+	{"JUZ", {"JUZ", 1, {}, 42, &Parser::JUZ}},
 
-	{"PUSH", 1, {T_REGISTER | T_ADDRESS | T_CONSTANT}, 50, &Parser::PUSH},
-	{"POP", 1, {T_REGISTER}, 54, &Parser::POP},
-	{"CALL", 1, {T_ADDRESS}, 55, &Parser::CALL},
-	{"RET", 0, {}, 57, &Parser::RET},
+	{"PUSH", {"PUSH", 1, {}, 50, &Parser::PUSH}},
+	{"POP",  {"POP",  1, {}, 54, &Parser::POP}},
+	{"CALL", {"CALL", 1, {}, 55, &Parser::CALL}},
+	{"RET",  {"RET",  0, {}, 57, &Parser::RET}},
 	
-	{"INC", 1, {T_REGISTER}, 60, &Parser::INC},
-	{"DEC", 1, {T_REGISTER}, 65, &Parser::DEC},
-	{"ADD", 2, {T_REGISTER, T_REGISTER | T_ADDRESS | T_CONSTANT}, 70, &Parser::ADD},
-	{"SUB", 2, {T_REGISTER, T_REGISTER | T_ADDRESS | T_CONSTANT}, 75, &Parser::SUB},
-	{"MUL", 1, {T_REGISTER | T_ADDRESS | T_CONSTANT}, 80, &Parser::MUL},
-	{"DIV", 1, {T_REGISTER | T_ADDRESS | T_CONSTANT}, 85, &Parser::DIV},
+	{"INC", {"INC", 1, {}, 60, &Parser::INC}},
+	{"DEC", {"DEC", 1, {}, 61, &Parser::DEC}},
+	{"ADD", {"ADD", 2, {}, 70, &Parser::ADD}},
+	{"SUB", {"SUB", 2, {}, 75, &Parser::SUB}},
+	{"MUL", {"MUL", 1, {}, 80, &Parser::MUL}},
+	{"DIV", {"DIV", 1, {}, 85, &Parser::DIV}},
 
-	{"AND", 2, {T_REGISTER, T_REGISTER | T_ADDRESS | T_CONSTANT}, 90, &Parser::AND},
-	{"OR", 2, {T_REGISTER, T_REGISTER | T_ADDRESS | T_CONSTANT}, 95, &Parser::OR},
-	{"XOR", 2, {T_REGISTER, T_REGISTER | T_ADDRESS | T_CONSTANT}, 100, &Parser::XOR},
+	{"AND", {"AND", 2, {}, 90, &Parser::AND}},
+	{"OR",  {"OR",  2, {}, 95, &Parser::OR}},
+	{"XOR", {"XOR", 2, {}, 100, &Parser::XOR}},
 
-	{"NOT", 1, {T_REGISTER}, 105, &Parser::NOT},													//STI (U -> U)
-	{"NOTT", 1, {T_REGISTER}, 106, &Parser::NOTT},													//PTI (U -> T)
-	{"NOTF", 1, {T_REGISTER}, 107, &Parser::NOTF},													//NTI (U -> F)
+	{"NOT",  {"NOT",  1, {}, 105, &Parser::NOT}},													//STI (U -> U)
+	{"NOTT", {"NOTT", 1, {}, 106, &Parser::NOTT}},													//PTI (U -> T)
+	{"NOTF", {"NOTF", 1, {}, 107, &Parser::NOTF}},													//NTI (U -> F)
 
-	{"SHL", 2, {T_REGISTER, T_REGISTER | T_ADDRESS | T_CONSTANT}, 110, &Parser::SHL},
-	{"SHR", 2, {T_REGISTER, T_REGISTER | T_ADDRESS | T_CONSTANT}, 115, &Parser::SHR}
+	{"SHL", {"SHL", 2, {}, 110, &Parser::SHL}},
+	{"SHR", {"SHR", 2, {}, 115, &Parser::SHR}}
 };
 
 /*
