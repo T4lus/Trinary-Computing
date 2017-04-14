@@ -21,7 +21,7 @@ print:						#print(C:*from, D:*to)
 
 .loop:
 	MOV A, [C]				#Get char from var
-	MOV [D], A				#Write to output
+	MOV [D+4], A				#Write to output
 	INC C
 	INC D  
 	CMP B, [C]				#Check if end

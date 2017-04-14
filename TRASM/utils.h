@@ -9,4 +9,6 @@ std::string fromRaw(std::string raw);
 bool isInteger(const std::string & s);
 bool isHex(std::string const& s);
 
+int getNumber(std::string);
+
 #endif

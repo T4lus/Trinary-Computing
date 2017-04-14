@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <string>
 
 #include "utils.h"
 
@@ -66,4 +67,11 @@ bool isInteger(const std::string & s) {
 
 bool isHex(std::string const& s) {
   return s.compare(0, 2, "0x") == 0 && s.size() > 2 && s.find_first_not_of("0123456789abcdefABCDEF", 2) == std::string::npos;
+}
+
+int getNumber(std::string str) {
+	if (isHex(str))
+		return strtoul(str.c_str(), NULL, 16);
+	if (isInteger)
+		return stoi(str);
 }

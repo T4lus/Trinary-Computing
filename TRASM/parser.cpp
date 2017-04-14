@@ -128,11 +128,12 @@ std::vector<args_type_t> Parser::GetArgType(std::vector<std::string> _args) {
 	std::vector<args_type_t> args_type;
 
 	for (auto arg : _args) {
+		remove_if(arg.begin(), arg.end(), isspace);
 		if (!arg.compare("A") || !arg.compare("B") || !arg.compare("C") || !arg.compare("D")) {
 			args_type.push_back(T_REGISTER);
 		}
 		else if (!arg.compare(0, 1, "[") && !arg.compare(arg.size()-1, 1, "]") ) {
-			if (!arg.compare("[A]") || !arg.compare("[B]") || !arg.compare("[C]") || !arg.compare("[D]"))
+			if (!arg.compare(0, 2, "[A") || !arg.compare(0, 2, "[B") || !arg.compare(0, 2, "[C") || !arg.compare(0, 2, "[D"))
 				args_type.push_back(T_REGISTER_ADDRESS);
 			else
 				args_type.push_back(T_ADDRESS);
@@ -145,6 +146,13 @@ std::vector<args_type_t> Parser::GetArgType(std::vector<std::string> _args) {
 		}
 	}
 	return args_type;
+}
+
+int Parser::getAddress(std::string _str, maps_t _map) {
+	//remove_if(_str.begin(), _str.end(), isspace);
+	std::cout << _str << std::endl;
+
+	return 1;
 }
 
 std::vector<Tryte> Parser::NOP(std::vector<std::string> _opMap, maps_t maps) {
@@ -173,30 +181,37 @@ std::vector<Tryte> Parser::MOV(std::vector<std::string> _opMap, maps_t maps) {
 	if (args_type[0] == T_REGISTER && args_type[1] == T_REGISTER_ADDRESS) {
 		memTab.push_back(op_tab["MOV"].value + 1);
 		memTab.push_back(register_tab[_opMap[2]]);
-		memTab.push_back(register_tab[_opMap[3].substr(1, _opMap[3].size() - 2)]);
+		memTab.push_back(getAddress(_opMap[3], maps));
 	}
 	if (args_type[0] == T_REGISTER && args_type[1] == T_ADDRESS) {
 		memTab.push_back(op_tab["MOV"].value + 2);
 		memTab.push_back(register_tab[_opMap[2]]);
+		memTab.push_back(getAddress(_opMap[3], maps));
 	}
 	if (args_type[0] == T_REGISTER && args_type[1] == T_CONSTANT) {
 		memTab.push_back(op_tab["MOV"].value + 3);
 		memTab.push_back(register_tab[_opMap[2]]);
+		memTab.push_back(getNumber(_opMap[3]));
 	}
 	if (args_type[0] == T_REGISTER_ADDRESS && args_type[1] == T_REGISTER) {
 		memTab.push_back(op_tab["MOV"].value + 4);
-		memTab.push_back(register_tab[_opMap[2].substr(1, _opMap[2].size() - 2)]);
+		memTab.push_back(getAddress(_opMap[2], maps));
 		memTab.push_back(register_tab[_opMap[3]]);
 	}
 	if (args_type[0] == T_ADDRESS && args_type[1] == T_CONSTANT) {
 		memTab.push_back(op_tab["MOV"].value + 5);
+		memTab.push_back(getAddress(_opMap[2], maps));
+		memTab.push_back(getNumber(_opMap[3]));
 	}
 	if (args_type[0] == T_ADDRESS && args_type[1] == T_REGISTER) {
 		memTab.push_back(op_tab["MOV"].value + 6);
+		memTab.push_back(getAddress(_opMap[2], maps));
+		memTab.push_back(register_tab[_opMap[3]]);
 	}
 	if (args_type[0] == T_REGISTER_ADDRESS && args_type[1] == T_CONSTANT) {
 		memTab.push_back(op_tab["MOV"].value + 7);
-		memTab.push_back(register_tab[_opMap[2].substr(1, _opMap[2].size() - 2)]);
+		memTab.push_back(getAddress(_opMap[2], maps));
+		memTab.push_back(getNumber(_opMap[3]));
 	}
 
 	return memTab;

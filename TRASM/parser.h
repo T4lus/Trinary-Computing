@@ -37,6 +37,8 @@ public:
 	void buildSizeMap();
 	void buildLabelMap();
 
+	static int getAddress(std::string, maps_t);
+
 	static std::vector<args_type_t> GetArgType(std::vector<std::string>);
 	static Tryte GetRegisterAddress(std::string);
 
