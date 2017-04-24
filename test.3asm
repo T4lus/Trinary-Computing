@@ -31,3 +31,4 @@ print:						#print(C:*from, D:*to)
 	RET
 
 	MOV A, C
+	

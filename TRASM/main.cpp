@@ -33,5 +33,5 @@ main(int argc, char* argv[])
         std::cout << "ASM abort !!!" << std::endl;
         return -1;
     }
-
+    parser->saveTrin();
 }

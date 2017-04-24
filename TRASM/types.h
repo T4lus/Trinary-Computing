@@ -13,6 +13,11 @@ enum opMapCol {
 typedef char    								args_type_t;
 typedef std::vector<std::vector<std::string>> 	map_t;
 
+typedef struct op_value_s {
+	args_type_t			type;
+	std::vector<Tryte>	value;
+} op_value_t;
+
 typedef struct op_size_s {
 	std::string		opcode;
 	int 			size;

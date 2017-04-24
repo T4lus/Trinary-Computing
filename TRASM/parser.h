@@ -26,6 +26,7 @@ private:
 
 	int							nbError = 0;
 	std::vector<std::string> 	errors;
+	std::vector<std::string> 	code;
 	
 	maps_t						maps;
 
@@ -33,11 +34,13 @@ public:
 	Parser(std::string _inFile, std::string _outFile);
 	
 	int parse();
+	int saveTrin();
 
 	void buildSizeMap();
 	void buildLabelMap();
 
 	static int getValue(std::string, maps_t);
+	static void checkNbArg(std::vector<std::string> _opMap);
 
 	static std::vector<args_type_t> GetArgType(std::vector<std::string>);
 	static Tryte GetRegisterAddress(std::string);
