@@ -3,7 +3,7 @@
 
 	JMP start
 hello: 
-	DB "Hello \"world\"" 		#Variable
+	DB "Hello" 		#Variable
 	DB 0					#string terminator
 	DB 0xff
 	DB 600

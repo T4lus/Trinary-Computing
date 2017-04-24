@@ -4,10 +4,10 @@
 
 
 std::map<std::string, int> register_tab = {
-	{"A", 1},
-	{"B", 2},
-	{"C", 3},
-	{"D", 4}
+	{"A", 0},
+	{"B", 1},
+	{"C", 2},
+	{"D", 3}
 };
 
 // {MNEMONIC, ARGS NUMBER, MODES, TRYTE VALUE, PARSE FUNCTION}
