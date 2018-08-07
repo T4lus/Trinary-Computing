@@ -4,9 +4,9 @@
 ## Trinary Makefile
 ## 
 
-NAME_ASM = trasm
-NAME_EMU = tremu
-NAME_TST = trtst
+NAME_ASM = bin/trasm
+NAME_EMU = bin/tremu
+NAME_TST = bin/trtst
 
 SRCDIR = ./Sources/
 HDDIR = ./Includes/

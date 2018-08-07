@@ -60,7 +60,7 @@ int Parser::parse() {
 			}
 		}
 	}
-/*
+
 	//debug
 	std::cout << " === DEBUG === " << std::endl;
 	std::cout << " -- label -- " << std::endl;
@@ -98,7 +98,7 @@ int Parser::parse() {
 			std::cout << " ";
 	}
 	std::cout << std::endl;
-*/
+
 	std::cout << "Parse 1 done, " << this->nbError << " error(s) detected" << std::endl;		
 	if (this->nbError)
 		return 1;
@@ -111,7 +111,7 @@ int Parser::saveTrin() {
 	for (auto item : this->code) {
 		outfile << item;
 		lineOffset++;
-		if (!(lineOffset % 27))
+		if (!(lineOffset % 9))
 			outfile << std::endl;
 		else
 			outfile << " ";
@@ -191,7 +191,7 @@ std::vector<args_type_t> Parser::GetArgType(std::vector<std::string> _args) {
 			args_type.push_back(T_REGISTER);
 		}
 		else if (!arg.compare(0, 1, "[") && !arg.compare(arg.size()-1, 1, "]") ) {
-			if (!arg.compare(0, 2, "[A") || !arg.compare(0, 2, "[B") || !arg.compare(0, 2, "[C") || !arg.compare(0, 2, "[D"))
+			if (register_tab.find(arg.substr(1, 2)) != register_tab.end())
 				args_type.push_back(T_REGISTER_ADDRESS);
 			else
 				args_type.push_back(T_ADDRESS);
