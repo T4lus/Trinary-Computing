@@ -34,3 +34,6 @@ trasm
 tremu
 trtst
 doc/~$specs.docx
+
+#folder
+.vscode/*

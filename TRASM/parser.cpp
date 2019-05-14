@@ -14,7 +14,7 @@ Parser::Parser(std::string _inFile, std::string _outFile) {
 int Parser::parse() {
 	this->nbError = 0;
 	int lineNumber = 0;
-	std::cout << "Starting parse ..." << std::endl;
+	std::cout << "Starting ..." << std::endl;
 
 	std::string line;
 	std::regex op_reg(OP_REGEX);
@@ -61,7 +61,8 @@ int Parser::parse() {
 		}
 	}
 
-	//debug
+	//========================
+	// debug
 	std::cout << " === DEBUG === " << std::endl;
 	std::cout << " -- label -- " << std::endl;
 	for (auto& item : this->maps.labelMap) {
@@ -75,7 +76,7 @@ int Parser::parse() {
 			try {
 				std::vector<Tryte> opmem = op_tab[op[opMapCol::mnemonic]].fct(op, this->maps);
 				for (auto mem : opmem) {
-					std::cout << mem.str() << " ";
+					std::cout << "(" << mem.to_int() << ") " << mem.str() << " ";
 				}
 			}
 			catch(std::string const& e) {
@@ -98,8 +99,9 @@ int Parser::parse() {
 			std::cout << " ";
 	}
 	std::cout << std::endl;
+	//========================
 
-	std::cout << "Parse 1 done, " << this->nbError << " error(s) detected" << std::endl;		
+	std::cout << "Done, " << this->nbError << " error(s) detected" << std::endl;		
 	if (this->nbError)
 		return 1;
 	return 0;
@@ -111,7 +113,7 @@ int Parser::saveTrin() {
 	for (auto item : this->code) {
 		outfile << item;
 		lineOffset++;
-		if (!(lineOffset % 9))
+		if (!(lineOffset % 6))
 			outfile << std::endl;
 		else
 			outfile << " ";
@@ -128,8 +130,8 @@ void Parser::buildSizeMap() {
 				currentSize = 1;
 			}
 			else if (op_tab[op[opMapCol::mnemonic]].nb_args < 2) {
-				if ( !op_tab[op[opMapCol::mnemonic]].opcode.compare("DB") ) {
-					currentSize = this->DB(op, this->maps).size();
+				if ( !op_tab[op[opMapCol::mnemonic]].opcode.compare("DATA") ) {
+					currentSize = this->DATA(op, this->maps).size();
 				} 
 				else {
 					std::vector<args_type_t> argType = GetArgType({op[2]});
@@ -190,8 +192,8 @@ std::vector<args_type_t> Parser::GetArgType(std::vector<std::string> _args) {
 		if (register_tab.find(arg) != register_tab.end()) {
 			args_type.push_back(T_REGISTER);
 		}
-		else if (!arg.compare(0, 1, "[") && !arg.compare(arg.size()-1, 1, "]") ) {
-			if (register_tab.find(arg.substr(1, 2)) != register_tab.end())
+		else if (!arg.compare(0, 1, "@")) {
+			if (register_tab.find(arg.substr(1, 3)) != register_tab.end())
 				args_type.push_back(T_REGISTER_ADDRESS);
 			else
 				args_type.push_back(T_ADDRESS);
@@ -206,6 +208,34 @@ std::vector<args_type_t> Parser::GetArgType(std::vector<std::string> _args) {
 	return args_type;
 }
 
+int Parser::parseAddress(std::string value) {
+	if (register_tab.find(value) != register_tab.end()) { // Register
+		return register_tab[value];
+	}
+	else if (register_tab.find(value.substr(0, 2)) != register_tab.end()) {
+		//offset addressing
+
+		int m = 0;
+		int base = register_tab[value.substr(0, 2)];
+
+		if(!value.compare(2, 1, "-"))
+			m = -1;
+		else if(!value.compare(2, 1, "+"))
+			m = 1;
+		else
+			throw std::string("bad offset operation");
+
+		int offset = m * getNumber(value.substr(3, value.size()-1));
+
+		if (offset < (-1*TRYTE_MAX - 27) || offset > (TRYTE_MAX - 27))
+		 	throw std::string("offset must be a value between -TRYTE_MAX and TRYTE_MAX");
+		
+		return offset * 27 + base; //sift offset 3 trit and add code for register
+	}
+	else 
+		return getNumber(value);
+}
+
 int Parser::getValue(std::string _str, maps_t _map) {
 	if ( _map.labelMap.find(_str) != _map.labelMap.end() ) { // Label
 		return _map.labelMap[_str];
@@ -213,11 +243,11 @@ int Parser::getValue(std::string _str, maps_t _map) {
 	else if (register_tab.find(_str) != register_tab.end()) { // Register
 		return register_tab[_str];
 	} 
-	else if (!_str.compare(0, 1, "[") && !_str.compare(_str.size()-1, 1, "]")) { // Address
-		return -1; /* @TODO */
-	}
 	else if (isInteger(_str) || isHex(_str)) { // Number
 		return getNumber(_str);
+	}
+	else if (!_str.compare(0, 1, "@")) { // Address
+		return parseAddress(_str.substr(1, _str.size()-1));
 	}
 	else if (!_str.compare(0, 1, "'") && !_str.compare(_str.size()-1, 1, "'")) { // Char 
 		if (_str.size() > 3)
@@ -236,32 +266,32 @@ std::vector<Tryte> Parser::NOP(std::vector<std::string> _opMap, maps_t maps) {
 	memTab = {op_tab["NOP"].value};
 	return memTab;
 }
-std::vector<Tryte> Parser::HLT(std::vector<std::string> _opMap, maps_t maps) {
+std::vector<Tryte> Parser::HALT(std::vector<std::string> _opMap, maps_t maps) {
 	checkNbArg(_opMap);
 	std::vector<Tryte> memTab;
-	memTab = {op_tab["HLT"].value};
+	memTab = {op_tab["HALT"].value};
 	return memTab;
 }
-std::vector<Tryte> Parser::MOV(std::vector<std::string> _opMap, maps_t maps) {
+std::vector<Tryte> Parser::LOAD(std::vector<std::string> _opMap, maps_t maps) {
 	checkNbArg(_opMap);
 	std::vector<Tryte> memTab;
 	std::vector<args_type_t> args_type = GetArgType({_opMap[2], _opMap[3]});
 	if ((args_type[0] == T_ADDRESS || args_type[0] == T_REGISTER_ADDRESS) && (args_type[1] == T_ADDRESS || args_type[1] == T_REGISTER_ADDRESS)) {
 		throw -1;
 	}
-	if (args_type[0] == T_REGISTER && args_type[1] == T_REGISTER) 			memTab.push_back(op_tab["MOV"].value);
-	if (args_type[0] == T_REGISTER && args_type[1] == T_REGISTER_ADDRESS) 	memTab.push_back(op_tab["MOV"].value + 1);
-	if (args_type[0] == T_REGISTER && args_type[1] == T_ADDRESS) 			memTab.push_back(op_tab["MOV"].value + 2);
-	if (args_type[0] == T_REGISTER && args_type[1] == T_NUMBER) 			memTab.push_back(op_tab["MOV"].value + 3);
-	if (args_type[0] == T_REGISTER_ADDRESS && args_type[1] == T_REGISTER) 	memTab.push_back(op_tab["MOV"].value + 4);
-	if (args_type[0] == T_REGISTER_ADDRESS && args_type[1] == T_NUMBER) 	memTab.push_back(op_tab["MOV"].value + 5);
-	if (args_type[0] == T_ADDRESS && args_type[1] == T_REGISTER) 			memTab.push_back(op_tab["MOV"].value + 6);
-	if (args_type[0] == T_ADDRESS && args_type[1] == T_NUMBER) 				memTab.push_back(op_tab["MOV"].value + 7);
+	if (args_type[0] == T_REGISTER && args_type[1] == T_REGISTER) 			memTab.push_back(op_tab["LOAD"].value);
+	if (args_type[0] == T_REGISTER && args_type[1] == T_REGISTER_ADDRESS) 	memTab.push_back(op_tab["LOAD"].value + 1);
+	if (args_type[0] == T_REGISTER && args_type[1] == T_ADDRESS) 			memTab.push_back(op_tab["LOAD"].value + 2);
+	if (args_type[0] == T_REGISTER && args_type[1] == T_NUMBER) 			memTab.push_back(op_tab["LOAD"].value + 3);
+	if (args_type[0] == T_REGISTER_ADDRESS && args_type[1] == T_REGISTER) 	memTab.push_back(op_tab["LOAD"].value + 4);
+	if (args_type[0] == T_REGISTER_ADDRESS && args_type[1] == T_NUMBER) 	memTab.push_back(op_tab["LOAD"].value + 5);
+	if (args_type[0] == T_ADDRESS && args_type[1] == T_REGISTER) 			memTab.push_back(op_tab["LOAD"].value + 6);
+	if (args_type[0] == T_ADDRESS && args_type[1] == T_NUMBER) 				memTab.push_back(op_tab["LOAD"].value + 7);
 	memTab.push_back(getValue(_opMap[2], maps));
 	memTab.push_back(getValue(_opMap[3], maps));
 	return memTab;
 }
-std::vector<Tryte> Parser::DB(std::vector<std::string> _opMap, maps_t maps) {
+std::vector<Tryte> Parser::DATA(std::vector<std::string> _opMap, maps_t maps) {
 	std::vector<Tryte> memTab;
 
 	if (isInteger(_opMap[2]) || isHex(_opMap[2])) {

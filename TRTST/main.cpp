@@ -80,11 +80,13 @@ int main(int argc, char* argv[])
 	
 	Tryte t_test = 90;
 	std::cout << t_test.str() << " : " << t_test.to_int() << std::endl;
-	t_test = "UUUUUUUUU";
+	t_test = "UUUUUU";
 	std::cout << t_test.str() << " : " << t_test.to_int() << std::endl;
-	t_test = "TTTTTTTTT";
+	t_test = "TTTTTT";
 	std::cout << t_test.str() << " : " << t_test.to_int() << std::endl;
-	t_test = "TUUUUUUUT";
+	t_test = "TUUUUT";
+	std::cout << t_test.str() << " : " << t_test.to_int() << std::endl;
+	t_test = "FFFFFF";
 	std::cout << t_test.str() << " : " << t_test.to_int() << std::endl;
 
 	std::cout << std::endl;
@@ -100,8 +102,8 @@ int main(int argc, char* argv[])
 
 	std::cout << std::endl;
 	std::cout << " SHL \t\t\t SHR" << std::endl;
-	Tryte t_test3 = "UUUUUUUUT";
-	Tryte t_test4 = "TUUUUUUUU";
+	Tryte t_test3 = "UUUUUT";
+	Tryte t_test4 = "TUUUUU";
 	std::cout << t_test3.str() << " : " << t_test3.to_int() << "\t\t" << t_test4.str() << " : " << t_test4.to_int() << std::endl;
 	for (int i = 0; i < 10; i++) {
 		Tryte::SHL(t_test3, 1);

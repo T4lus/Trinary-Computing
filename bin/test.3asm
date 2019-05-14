@@ -1,34 +1,29 @@
-#Simple example
-#Writes Hello World to the output
+# Simple example
+# Writes Hello World to the output
 
-	JMP start
+JMP start
 hello: 
-	DB "Hello" 		#Variable
-	DB 0					#string terminator
-	DB 0xff
-	DB 600
+	DATA "Hello World!" 		# Variable
+    DATA 0						# String terminator
 
 start:
-	MOV C, hello 			#Point to var 
-	MOV D, 232 				#Point to output
+	LOAD rc, hello    			# Point to var 
+	LOAD rd, 232				# Point to output
 	CALL print
-	HLT						#Stop execution
+    HALT	             		# Stop execution
 
-print:						#print(C:*from, D:*to)
-	PUSH A
-	PUSH B
-	MOV B, 0
-
+print:							# print(C:*from, D:*to)
+	PUSH ra
+	PUSH rb
+	LOAD rb, 0
 .loop:
-	MOV A, [C]				#Get char from var
-	MOV [D+4], A				#Write to output
-	INC C
-	INC D  
-	CMP B, [C]				#Check if end
-	JNZ .loop				#jump if not
-	POP B
-	POP A
-	RET
+	LOAD ra, @rc				# Get char from var
+	LOAD @rd, ra				# Write to output
+	INC rc
+	INC rd  
+	CMP rb, @rc					# Check if end
+	JNZ .loop					# jump if not
 
-	MOV A, C
-	
+	POP rb
+	POP ra
+	RET

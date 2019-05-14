@@ -39,6 +39,9 @@ public:
 	void buildSizeMap();
 	void buildLabelMap();
 
+	static int parseRegister(std::string value);
+	static int parseAddress(std::string value);
+
 	static int getValue(std::string, maps_t);
 	static void checkNbArg(std::vector<std::string> _opMap);
 
@@ -46,9 +49,9 @@ public:
 	static Tryte GetRegisterAddress(std::string);
 
 	static std::vector<Tryte> NOP(std::vector<std::string>, maps_t);	
-	static std::vector<Tryte> HLT(std::vector<std::string>, maps_t);
-	static std::vector<Tryte> MOV(std::vector<std::string>, maps_t);
-	static std::vector<Tryte> DB(std::vector<std::string>, maps_t);
+	static std::vector<Tryte> HALT(std::vector<std::string>, maps_t);
+	static std::vector<Tryte> LOAD(std::vector<std::string>, maps_t);
+	static std::vector<Tryte> DATA(std::vector<std::string>, maps_t);
 	
 	static std::vector<Tryte> CMP(std::vector<std::string>, maps_t);
 	

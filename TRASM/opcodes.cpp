@@ -19,10 +19,11 @@ std::map<std::string, int> register_tab = {
 
 // {MNEMONIC, ARGS NUMBER, MODES, TRYTE VALUE, PARSE FUNCTION}
 std::map<std::string, op_t> op_tab = {
-	{"HLT", {"HLT", 0, {}, -1, &Parser::NOP}},
-	{"NOP", {"NOP", 0, {}, 0, &Parser::HLT}},
-	{"MOV", {"MOV", 2, {}, 1, &Parser::MOV}},
-	{"DB",  {"DB",  1, {}, 10, &Parser::DB}},
+	{"NOP", {"NOP", 0, {}, 0, &Parser::NOP}},
+	{"HALT", {"HALT", 0, {}, -1, &Parser::HALT}},
+	{"LOAD", {"LOAD", 2, {}, 1, &Parser::LOAD}},
+	
+	{"DATA", {"DATA",  1, {}, 10, &Parser::DATA}},
 
 	{"CMP", {"CMP", 2, {}, 20, &Parser::CMP}},
 	

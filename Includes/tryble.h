@@ -12,17 +12,18 @@
 
 #include <algorithm>
 #include <string>
+#include <cmath>
 
 #include <assert.h>
 #include <string.h>
 
 #include <trit.h>
 
+#define TRYBLE_CTRIT 3
+#define TRYBLE_MAX	(std::pow(3, TRYBLE_CTRIT) - 1)/2
+
 class Tryble {
 public:
-	static const int CTRIT = 3;
-	static const int Tryble_MAX = 13;
-	
 	Tryble() {
 	}
 
@@ -30,13 +31,13 @@ public:
 		int ival = int8;
 		bool fneg = ival < 0;
 
-		if (abs(int8) >= Tryble_MAX)
+		if (abs(int8) >= TRYBLE_MAX)
 			ival = 0;
 
 		if (fneg)
 			ival = -ival;
 
-		for (int idigit = 0; idigit < CTRIT; ++idigit) {
+		for (int idigit = 0; idigit < TRYBLE_CTRIT; ++idigit) {
 			switch (ival % 3) {
 				case 0:
 					rgdigit[idigit] = 'U';
@@ -60,7 +61,7 @@ public:
 
 	Tryble(const char *sz) {
 		int cch = strlen(sz);
-		assert(cch <= CTRIT);
+		assert(cch <= TRYBLE_CTRIT);
 		int itrit = 0;
 		while (cch > 0) {
 			--cch;
@@ -71,7 +72,7 @@ public:
 
 	int to_int() {
 		int iret = 0;
-		for (int idigit = CTRIT - 1; idigit >= 0; --idigit) {
+		for (int idigit = TRYBLE_CTRIT - 1; idigit >= 0; --idigit) {
 			iret *= 3;
 			switch ((char)rgdigit[idigit]) {
 				case 'T':
@@ -86,13 +87,13 @@ public:
 	}
 
 	Trit &operator[](int idx) {
-		assert(idx >= 0 && idx < CTRIT);
+		assert(idx >= 0 && idx < TRYBLE_CTRIT);
 		return rgdigit[idx];
 	}
 
 	Tryble operator~() {
 		Tryble Tryble;
-		for (int idigit = 0; idigit < CTRIT; ++idigit)
+		for (int idigit = 0; idigit < TRYBLE_CTRIT; ++idigit)
 		{
 			Tryble.rgdigit[idigit] = ~rgdigit[idigit];
 		}
@@ -101,19 +102,19 @@ public:
 
 	Tryble operator&(Tryble &other) {
 		Tryble Tryble;
-		for (int idigit = 0; idigit < CTRIT; ++idigit)
+		for (int idigit = 0; idigit < TRYBLE_CTRIT; ++idigit)
 			Tryble[idigit] = rgdigit[idigit] & other.rgdigit[idigit];
 		return Tryble;
 	}
 	Tryble operator|(Tryble &other) {
 		Tryble Tryble;
-		for (int idigit = 0; idigit < CTRIT; ++idigit)
+		for (int idigit = 0; idigit < TRYBLE_CTRIT; ++idigit)
 			Tryble[idigit] = rgdigit[idigit] | other.rgdigit[idigit];
 		return Tryble;
 	}
 	Tryble operator^(Tryble &other) {
 		Tryble Tryble;
-		for (int idigit = 0; idigit < CTRIT; ++idigit)
+		for (int idigit = 0; idigit < TRYBLE_CTRIT; ++idigit)
 			Tryble[idigit] = rgdigit[idigit] ^ other.rgdigit[idigit];
 		return Tryble;
 	}
@@ -123,7 +124,7 @@ public:
 	}
 
 	Tryble operator++(int) {
-		for (int idigit = 0; idigit < CTRIT; ++idigit) {
+		for (int idigit = 0; idigit < TRYBLE_CTRIT; ++idigit) {
 			rgdigit[idigit]++;
 			if ((char)rgdigit[idigit] != 'F')
 				break;
@@ -132,7 +133,7 @@ public:
 	}
 
 	Tryble operator--(int) {
-		for (int idigit = 0; idigit < CTRIT; ++idigit) {
+		for (int idigit = 0; idigit < TRYBLE_CTRIT; ++idigit) {
 			rgdigit[idigit]--;
 			if ((char)rgdigit[idigit] != 'T')
 				break;
@@ -141,7 +142,7 @@ public:
 	}
 
 	bool operator==(Tryble &other) {
-		for (int idigit = 0; idigit < CTRIT; ++idigit) {
+		for (int idigit = 0; idigit < TRYBLE_CTRIT; ++idigit) {
 			if (((char)rgdigit[idigit] != (char)other.rgdigit[idigit]))
 				return false;
 		}
@@ -169,14 +170,14 @@ public:
 	operator int() = delete;
 
 	std::string str() {
-		reinterpret_cast<char&>(rgdigit[CTRIT]) = '\0';
+		reinterpret_cast<char&>(rgdigit[TRYBLE_CTRIT]) = '\0';
 		std::string str((char*)rgdigit);
 		std::reverse(str.begin(), str.end());
 		return str;
 	}
 
 private:
-	Trit rgdigit[CTRIT + 1];
+	Trit rgdigit[TRYBLE_CTRIT + 1];
 
 };
 

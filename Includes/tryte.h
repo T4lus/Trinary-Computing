@@ -12,17 +12,18 @@
 
 #include <algorithm>
 #include <string>
+#include <cmath>
 
 #include <assert.h>
 #include <string.h>
 
 #include <trit.h>
 
+#define TRYTE_CTRIT 9
+#define TRYTE_MAX	(std::pow(3, TRYTE_CTRIT) - 1)/2
+
 class Tryte {
 public:
-	static const int CTRIT = 9;
-	static const int Tryte_MAX = 9841;
-
 	Tryte() {
 	}
 
@@ -30,13 +31,13 @@ public:
 		int ival = int8;
 		bool fneg = ival < 0;
 
-		if (abs(int8) >= Tryte_MAX)
+		if (abs(int8) >= TRYTE_MAX)
 			ival = 0;
 
 		if (fneg)
 			ival = -ival;
 
-		for (int idigit = 0; idigit < CTRIT; ++idigit) {
+		for (int idigit = 0; idigit < TRYTE_CTRIT; ++idigit) {
 			switch (ival % 3) {
 				case 0:
 					rgdigit[idigit] = 'U';
@@ -60,7 +61,7 @@ public:
 
 	Tryte(const char *sz) {
 		int cch = strlen(sz);
-		assert(cch <= CTRIT);
+		assert(cch <= TRYTE_CTRIT);
 		int itrit = 0;
 		while (cch > 0) {
 			--cch;
@@ -71,28 +72,20 @@ public:
 
 	int to_int() {
 		int iret = 0;
-		for (int idigit = CTRIT - 1; idigit >= 0; --idigit) {
-			iret *= 3;
-			switch ((char)rgdigit[idigit]) {
-				case 'T':
-					iret++;
-					break;
-				case 'F':
-					iret--;
-					break;
-			}
+		for (int idigit = TRYTE_CTRIT - 1; idigit >= 0; --idigit) {
+			iret += ((char)rgdigit[idigit] == 'T' ? 1 : (char)rgdigit[idigit] == 'F' ? -1 : 0) * std::pow(3, idigit);
 		}
 		return iret;
 	}
 
 	Trit &operator[](int idx) {
-		assert(idx >= 0 && idx < CTRIT);
+		assert(idx >= 0 && idx < TRYTE_CTRIT);
 		return rgdigit[idx];
 	}
 
 	Tryte operator~() {
 		Tryte Tryte;
-		for (int idigit = 0; idigit < CTRIT; ++idigit)
+		for (int idigit = 0; idigit < TRYTE_CTRIT; ++idigit)
 		{
 			Tryte.rgdigit[idigit] = ~rgdigit[idigit];
 		}
@@ -101,19 +94,19 @@ public:
 
 	Tryte operator&(Tryte &other) {
 		Tryte Tryte;
-		for (int idigit = 0; idigit < CTRIT; ++idigit)
+		for (int idigit = 0; idigit < TRYTE_CTRIT; ++idigit)
 			Tryte[idigit] = rgdigit[idigit] & other.rgdigit[idigit];
 		return Tryte;
 	}
 	Tryte operator|(Tryte &other) {
 		Tryte Tryte;
-		for (int idigit = 0; idigit < CTRIT; ++idigit)
+		for (int idigit = 0; idigit < TRYTE_CTRIT; ++idigit)
 			Tryte[idigit] = rgdigit[idigit] | other.rgdigit[idigit];
 		return Tryte;
 	}
 	Tryte operator^(Tryte &other) {
 		Tryte Tryte;
-		for (int idigit = 0; idigit < CTRIT; ++idigit)
+		for (int idigit = 0; idigit < TRYTE_CTRIT; ++idigit)
 			Tryte[idigit] = rgdigit[idigit] ^ other.rgdigit[idigit];
 		return Tryte;
 	}
@@ -123,7 +116,7 @@ public:
 	}
 
 	Tryte operator++(int) {
-		for (int idigit = 0; idigit < CTRIT; ++idigit) {
+		for (int idigit = 0; idigit < TRYTE_CTRIT; ++idigit) {
 			rgdigit[idigit]++;
 			if ((char)rgdigit[idigit] != 'F')
 				break;
@@ -132,7 +125,7 @@ public:
 	}
 
 	Tryte operator--(int) {
-		for (int idigit = 0; idigit < CTRIT; ++idigit) {
+		for (int idigit = 0; idigit < TRYTE_CTRIT; ++idigit) {
 			rgdigit[idigit]--;
 			if ((char)rgdigit[idigit] != 'T')
 				break;
@@ -141,7 +134,7 @@ public:
 	}
 
 	bool operator==(Tryte &other) {
-		for (int idigit = 0; idigit < CTRIT; ++idigit) {
+		for (int idigit = 0; idigit < TRYTE_CTRIT; ++idigit) {
 			if (((char)rgdigit[idigit] != (char)other.rgdigit[idigit]))
 				return false;
 		}
@@ -169,14 +162,14 @@ public:
 	operator int() = delete;
 
 	std::string str() {
-		reinterpret_cast<char&>(rgdigit[CTRIT]) = '\0';
+		reinterpret_cast<char&>(rgdigit[TRYTE_CTRIT]) = '\0';
 		std::string str((char*)rgdigit);
 		std::reverse(str.begin(), str.end());
 		return str;
 	}
 
 private:
-	Trit rgdigit[CTRIT + 1];
+	Trit rgdigit[TRYTE_CTRIT + 1];
 };
 
 #endif
