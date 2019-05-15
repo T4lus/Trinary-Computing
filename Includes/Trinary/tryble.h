@@ -17,7 +17,7 @@
 #include <assert.h>
 #include <string.h>
 
-#include <trit.h>
+#include "trit.h"
 
 #define TRYBLE_CTRIT 3
 #define TRYBLE_MAX	(std::pow(3, TRYBLE_CTRIT) - 1)/2
@@ -68,22 +68,6 @@ public:
 			rgdigit[itrit] = sz[cch];
 			++itrit;
 		}
-	}
-
-	int to_int() {
-		int iret = 0;
-		for (int idigit = TRYBLE_CTRIT - 1; idigit >= 0; --idigit) {
-			iret *= 3;
-			switch ((char)rgdigit[idigit]) {
-				case 'T':
-					iret++;
-					break;
-				case 'F':
-					iret--;
-					break;
-			}
-		}
-		return iret;
 	}
 
 	Trit &operator[](int idx) {
@@ -167,7 +151,25 @@ public:
 		return this->to_int() != 0;
 	}
 
-	operator int() = delete;
+	operator int() {
+		return this->to_int();
+	}
+
+	int to_int() {
+		int iret = 0;
+		for (int idigit = TRYBLE_CTRIT - 1; idigit >= 0; --idigit) {
+			iret *= 3;
+			switch ((char)rgdigit[idigit]) {
+				case 'T':
+					iret++;
+					break;
+				case 'F':
+					iret--;
+					break;
+			}
+		}
+		return iret;
+	}
 
 	std::string str() {
 		reinterpret_cast<char&>(rgdigit[TRYBLE_CTRIT]) = '\0';

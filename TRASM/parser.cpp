@@ -1,9 +1,10 @@
 #include <functional>
 
-#include <tryte.h>
+#include <Trinary/tryte.h>
+#include <Utils/utils.h>
 
 #include "parser.h"
-#include "utils.h"
+
 
 
 Parser::Parser(std::string _inFile, std::string _outFile) {
@@ -41,11 +42,11 @@ int Parser::parse() {
 		}
 	}
 
-	//create size map
-	this->buildSizeMap();
-	//create size map
-	this->buildLabelMap();
-	//create code
+	
+	this->buildSizeMap();		// create size map
+	this->buildLabelMap();		// create label map
+	
+	// create code
 	for (auto op : this->maps.opMap) {
 		if (op_tab.find(op[opMapCol::mnemonic]) != op_tab.end()) {
 			try {
@@ -63,42 +64,42 @@ int Parser::parse() {
 
 	//========================
 	// debug
-	std::cout << " === DEBUG === " << std::endl;
-	std::cout << " -- label -- " << std::endl;
-	for (auto& item : this->maps.labelMap) {
-		std::cout << item.first << "\t : " << Tryte(item.second).str() << std::endl;
-	}
-	std::cout << std::endl;
-	std::cout << " -- memory -- " << std::endl;
-	for (auto op : this->maps.opMap) {
-		if (op_tab.find(op[opMapCol::mnemonic]) != op_tab.end()) {
-			std::cout << op_tab[op[opMapCol::mnemonic]].opcode << "\t : ";
-			try {
-				std::vector<Tryte> opmem = op_tab[op[opMapCol::mnemonic]].fct(op, this->maps);
-				for (auto mem : opmem) {
-					std::cout << "(" << mem.to_int() << ") " << mem.str() << " ";
-				}
-			}
-			catch(std::string const& e) {
-				std::cout << e;
-				this->nbError++;
-			}
+	// std::cout << " === DEBUG === " << std::endl;
+	// std::cout << " -- label -- " << std::endl;
+	// for (auto& item : this->maps.labelMap) {
+	// 	std::cout << item.first << "\t : " << Tryte(item.second).str() << std::endl;
+	// }
+	// std::cout << std::endl;
+	// std::cout << " -- memory -- " << std::endl;
+	// for (auto op : this->maps.opMap) {
+	// 	if (op_tab.find(op[opMapCol::mnemonic]) != op_tab.end()) {
+	// 		std::cout << op_tab[op[opMapCol::mnemonic]].opcode << "\t : ";
+	// 		try {
+	// 			std::vector<Tryte> opmem = op_tab[op[opMapCol::mnemonic]].fct(op, this->maps);
+	// 			for (auto mem : opmem) {
+	// 				std::cout << "(" << mem.to_int() << ") " << mem.str() << " ";
+	// 			}
+	// 		}
+	// 		catch(std::string const& e) {
+	// 			std::cout << e;
+	// 			this->nbError++;
+	// 		}
 			
-			std::cout << std::endl;
-		}
-	}
-	std::cout << std::endl;
-	std::cout << " -- code -- " << std::endl;
-	int lineOffset = 0;
-	for (auto item : this->code) {
-		std::cout << item;
-		lineOffset++;
-		if (!(lineOffset % 6))
-			std::cout << std::endl;
-		else
-			std::cout << " ";
-	}
-	std::cout << std::endl;
+	// 		std::cout << std::endl;
+	// 	}
+	// }
+	// std::cout << std::endl;
+	// std::cout << " -- code -- " << std::endl;
+	// int lineOffset = 0;
+	// for (auto item : this->code) {
+	// 	std::cout << item;
+	// 	lineOffset++;
+	// 	if (!(lineOffset % 6))
+	// 		std::cout << std::endl;
+	// 	else
+	// 		std::cout << " ";
+	// }
+	// std::cout << std::endl;
 	//========================
 
 	std::cout << "Done, " << this->nbError << " error(s) detected" << std::endl;		
@@ -212,9 +213,7 @@ int Parser::parseAddress(std::string value) {
 	if (register_tab.find(value) != register_tab.end()) { // Register
 		return register_tab[value];
 	}
-	else if (register_tab.find(value.substr(0, 2)) != register_tab.end()) {
-		//offset addressing
-
+	else if (register_tab.find(value.substr(0, 2)) != register_tab.end()) { //Offset Adressing
 		int m = 0;
 		int base = register_tab[value.substr(0, 2)];
 

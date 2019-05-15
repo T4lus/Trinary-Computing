@@ -8,7 +8,8 @@
 #include <iostream>
 #include <string>
 
-#include <trinary.h>
+#include <Trinary/trinary.h>
+#include <Utils/utils.h>
 
 std::string execPath;
 
@@ -78,38 +79,13 @@ int main(int argc, char* argv[])
 	std::cout << std::endl;
 	std::cout << "Tryte test : " << std::endl;
 	
-	Tryte t_test = 90;
+	Tryte t_test;
+	t_test = "TTTTTTTTT";
 	std::cout << t_test.str() << " : " << t_test.to_int() << std::endl;
-	t_test = "UUUUUU";
+	t_test = "UUUUUUUUU";
 	std::cout << t_test.str() << " : " << t_test.to_int() << std::endl;
-	t_test = "TTTTTT";
+	t_test = "FFFFFFFFF";
 	std::cout << t_test.str() << " : " << t_test.to_int() << std::endl;
-	t_test = "TUUUUT";
-	std::cout << t_test.str() << " : " << t_test.to_int() << std::endl;
-	t_test = "FFFFFF";
-	std::cout << t_test.str() << " : " << t_test.to_int() << std::endl;
-
-	std::cout << std::endl;
-	std::cout << " INC \t\t\t DEC" << std::endl;
-	Tryte t_test1 = 0;
-	Tryte t_test2 = 0;
-	std::cout << t_test1.str() << " : " << t_test1.to_int() << "\t\t" << t_test2.str() << " : " << t_test2.to_int() << std::endl;
-	for (int i = 0; i < 10; i++) {
-		t_test1++;
-		t_test2--;
-		std::cout << t_test1.str() << " : " << t_test1.to_int() << "\t\t" << t_test2.str() << " : " << t_test2.to_int() << std::endl;
-	}
-
-	std::cout << std::endl;
-	std::cout << " SHL \t\t\t SHR" << std::endl;
-	Tryte t_test3 = "UUUUUT";
-	Tryte t_test4 = "TUUUUU";
-	std::cout << t_test3.str() << " : " << t_test3.to_int() << "\t\t" << t_test4.str() << " : " << t_test4.to_int() << std::endl;
-	for (int i = 0; i < 10; i++) {
-		Tryte::SHL(t_test3, 1);
-		Tryte::SHR(t_test4, 1);
-		std::cout << t_test3.str() << " : " << t_test3.to_int() << "\t\t" << t_test4.str() << " : " << t_test4.to_int() << std::endl;
-	}
 
 	std::cout << std::endl;
 	std::cout << "Tryble test : " << std::endl;
@@ -120,8 +96,27 @@ int main(int argc, char* argv[])
 	std::cout << tr_test.str() << " : " << tr_test.to_int() << std::endl;
 	tr_test = "TTT";
 	std::cout << tr_test.str() << " : " << tr_test.to_int() << std::endl;
-	tr_test = "TUT";
-	std::cout << tr_test.str() << " : " << tr_test.to_int() << std::endl;
+
+	std::cout << std::endl;
+	std::cout << "Utils test : " << std::endl;
+	std::cout << "uheptDec(1) - 1: " << uheptDec("1") << std::endl;
+	std::cout << "uheptDec(15) - 32: " << uheptDec("15") << std::endl; 
+	std::cout << "uheptDec(KZ) - 512: " << uheptDec("KZ") << std::endl;
+	std::cout << "uheptDec(1AX) - 1024: " << uheptDec("1AX") << std::endl;
+	std::cout << "uheptDec(DDD) - 9841: " << uheptDec("DDD") << std::endl;
+	std::cout << "uheptDec(ZZZ) - 19682: " << uheptDec("ZZZ") << std::endl;
+	std::cout << std::endl;
+	std::cout << "heptDec(000) - -9841: " << heptDec("000") << std::endl;
+	std::cout << "heptDec(CC) - -15: " << heptDec("CC") << std::endl; 
+	std::cout << "heptDec(CD) - -14: " << heptDec("CD") << std::endl; 
+	std::cout << "heptDec(0) - -13: " << heptDec("0") << std::endl; 
+	std::cout << "heptDec(C) - -1: " << heptDec("C") << std::endl; 
+	std::cout << "heptDec(D) - 0: " << heptDec("D") << std::endl;
+	std::cout << "heptDec(E) - 1: " << heptDec("E") << std::endl;
+	std::cout << "heptDec(Z) - 13: " << heptDec("Z") << std::endl;
+	std::cout << "heptDec(ED) - 14: " << heptDec("ED") << std::endl;
+	std::cout << "heptDec(EE) - 15: " << heptDec("EE") << std::endl;
+	std::cout << "heptDec(ZZZ) - 9841: " << heptDec("ZZZ") << std::endl;
 
 	return 0;
 }

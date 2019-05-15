@@ -16,7 +16,7 @@
 #include <assert.h>
 #include <string.h>
 
-#include <trit.h>
+#include "trit.h"
 
 class TWord {
 public:

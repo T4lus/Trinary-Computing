@@ -8,7 +8,7 @@
 #include <iostream>
 #include <string>
 
-#include <trinary.h>
+#include <Trinary/trinary.h>
 
 std::string execPath;
 

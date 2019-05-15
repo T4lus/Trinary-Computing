@@ -11,7 +11,7 @@
 #include <functional>
 #include <map>
 
-#include <tryte.h>
+#include <Trinary/tryte.h>
 #include "parser.h"
 #include "types.h"
 

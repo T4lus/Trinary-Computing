@@ -13,7 +13,7 @@
 #include <sstream>
 #include <regex>
 
-#include <tryte.h>
+#include <Trinary/tryte.h>
 
 #include "opcodes.h"
 #include "types.h"
