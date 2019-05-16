@@ -76,12 +76,10 @@ public:
 	}
 
 	Tryte operator~() {
-		Tryte Tryte;
+		Tryte tryte;
 		for (int idigit = 0; idigit < TRYTE_CTRIT; ++idigit)
-		{
-			Tryte.rgdigit[idigit] = ~rgdigit[idigit];
-		}
-		return Tryte;
+			tryte.rgdigit[idigit] = ~rgdigit[idigit];
+		return tryte;
 	}
 
 	Tryte operator&(Tryte &other) {
@@ -156,11 +154,10 @@ public:
 	}
 
 	int to_int() {
-		int iret = 0;
-		for (int idigit = TRYTE_CTRIT - 1; idigit >= 0; --idigit) {
-			iret += ((char)rgdigit[idigit] == 'T' ? 1 : (char)rgdigit[idigit] == 'F' ? -1 : 0) * std::pow(3, idigit);
-		}
-		return iret;
+		int value = 0;
+		for (int idigit = TRYTE_CTRIT - 1; idigit >= 0; --idigit)
+			value += ((char)rgdigit[idigit] == 'T' ? 1 : (char)rgdigit[idigit] == 'F' ? -1 : 0) * std::pow(3, idigit);
+		return value;
 	}
 
 	std::string str() {

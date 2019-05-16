@@ -2,10 +2,11 @@
 #define UTILS_H
 
 #include <iostream>
+#include <map>
 #include <string>
 #include <vector>
 
-#include <Trinary/tryble.h>
+#include <Trinary/tryte.h>
 
 std::string trim(const std::string& str, const std::string& whitespace = " \t") {
 	const auto strBegin = str.find_first_not_of(whitespace);
@@ -58,44 +59,41 @@ std::string fromRaw(std::string raw){
 	return str;
 }
 
-static const std::string HEPT_CHARS = "0123456789ABCDEFGHKMNPRTVXZ";
-                                           
+inline int modulo(int a, int b) {
+    const int result = a % b;
+    return result >= 0 ? result : result + b;
+}
+
+static const std::string HEPT_CHARS = "0123456789ABCDEFGHKMNPRTVXZ";                                        
 static const std::string HEPT_CHARS_NEG = "CBA9876543210";
 static const std::string HEPT_CHARS_POS = "EFGHKMNPRTVXZ";
 
-std::string heptEnc(const int &value){
-
-}
-
-int uheptDec(const std::string &s){
+int heptDec(std::string s) {
     int value = 0;
-
     std::string str = s;
 
     std::reverse(str.begin(), str.end());
-    for(int i = 0; i< str.size(); i++) {
-        value += HEPT_CHARS.find(str[i]) * std::pow(27, i);
-    }
+    for(int i = 0; i< str.size(); i++)
+        value += ((int)HEPT_CHARS.find(str[i]) - 13) * std::pow(27, i);
     return value;
 }
 
-int heptDec(const std::string &s){
-    int value = 0;
+std::string heptEnc(Tryte value) {
+    return heptEnc(value.to_int());
+}
+std::string heptEnc(int value) {
+    std::string result = "";
 
-    for(int i = s.size()-1; i>=0; --i) {
-    
-        if (s[i] == 'D')
-            value += 0 * std::pow(14, (s.size() - 1) - i);
-        else if (s.find_first_not_of(HEPT_CHARS_POS) == std::string::npos)
-            value += (HEPT_CHARS_POS.find(s[i])+1) * std::pow(14, (s.size() - 1) - i);
-        else if (s.find_first_not_of(HEPT_CHARS_NEG) == std::string::npos)
-            value += -1 * (HEPT_CHARS_NEG.find(s[i])+1) * std::pow(14, (s.size() - 1) - i);
-    }
+    do {
+        int pos = value % 27;
+        result = std::string(HEPT_CHARS[modulo(pos + 13, 27)] + result);
+        value = (value + pos) / 27;
+    } while (value != 0);
 
-    return value;
+    return result;
 }
 
-bool isInteger(const std::string & s) {
+bool isInteger(std::string s) {
 	if(s.empty() || ((!isdigit(s[0])) && (s[0] != '-') && (s[0] != '+'))) 
 		return false;
 
@@ -105,11 +103,11 @@ bool isInteger(const std::string & s) {
 	return *p == 0;
 }
 
-bool isHept(std::string const& s) {
-	return s.compare(0, 2, "0t") == 0 && s.size() > 2 && s.find_first_not_of("0123456789ABCDEFGHKMNPRTVXZ", 2) == std::string::npos;	
+bool isHept(std::string s) {
+	return s.compare(0, 2, "3x") == 0 && s.size() > 2 && s.find_first_not_of("0123456789ABCDEFGHKMNPRTVXZ", 2) == std::string::npos;	
 }
 
-bool isHex(std::string const& s) {
+bool isHex(std::string s) {
   return s.compare(0, 2, "0x") == 0 && s.size() > 2 && s.find_first_not_of("0123456789abcdefABCDEF", 2) == std::string::npos;
 }
 

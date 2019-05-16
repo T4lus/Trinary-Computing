@@ -52,7 +52,7 @@ int Parser::parse() {
 			try {
 				std::vector<Tryte> opmem = op_tab[op[opMapCol::mnemonic]].fct(op, this->maps);
 				for (auto mem : opmem) {
-					this->code.push_back(mem.str());
+					this->code.push_back(heptEnc(mem.to_int()));
 				}
 			}
 			catch(std::string const& e) {
@@ -114,7 +114,7 @@ int Parser::saveTrin() {
 	for (auto item : this->code) {
 		outfile << item;
 		lineOffset++;
-		if (!(lineOffset % 6))
+		if (!(lineOffset % 13))
 			outfile << std::endl;
 		else
 			outfile << " ";
