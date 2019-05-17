@@ -8,7 +8,7 @@ hello:
 
 start:
 	LOAD rc, hello    			# Point to var 
-	LOAD rd, 232				# Point to output
+	LOAD rd, 3xC00				# Point to output
 	CALL print
     HALT	             		# Stop execution
 
@@ -27,4 +27,3 @@ print:							# print(C:*from, D:*to)
 	POP rb
 	POP ra
 	RET
-	

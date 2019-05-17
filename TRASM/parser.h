@@ -38,6 +38,8 @@ public:
 
 	void buildSizeMap();
 	void buildLabelMap();
+	void buildCode();
+	void debug();
 
 	static int parseRegister(std::string value);
 	static int parseAddress(std::string value);

@@ -105,7 +105,6 @@ class CPU {
                 this->carry = 'T';
                 value = 9841 - (-value) % 9841;
             }
-
             return value;
         };
 
@@ -654,6 +653,16 @@ class CPU {
 
         Tryte getSP() {
             return this->sp;
+        }
+
+        Trit getZero() {
+            return this->zero;
+        }
+        Trit getCarry() {
+            return this->carry;
+        }
+        Trit getFault() {
+            return this->fault;
         }
 
 };

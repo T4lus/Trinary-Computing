@@ -33,6 +33,10 @@ public:
 		return this->m_ch;
 	}
 
+	char to_char() {
+		return this->m_ch;
+	}
+
 	explicit operator bool() {
 		return this->m_ch == 'T';
 	}

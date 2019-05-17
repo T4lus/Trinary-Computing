@@ -20,11 +20,19 @@
 
 std::string execPath;
 
+WINDOW *createVideoWindow() {
+	WINDOW *localWin;
+
+	localWin = subwin(stdscr, 13, 81, 0, 28);
+	box(localWin, 0, 0);
+	wrefresh(localWin);
+	return localWin;
+}
 
 WINDOW *createCPUWindow() {
 	WINDOW *localWin;
 
-	localWin = subwin(stdscr, 11, 50, 0, 0);
+	localWin = subwin(stdscr, 11, 27, 0, 0);
 	box(localWin, 0, 0);
 	mvwprintw(localWin, 1, 1, "CPU");
 	wrefresh(localWin);
@@ -34,6 +42,7 @@ WINDOW *createCPUWindow() {
 void displayCPU(WINDOW *win, CPU *cpu) {
 	char i = 0;
 
+	// register
 	for(auto gpr:cpu->getGPR()) {
 		char gpr_name[4] = {'r', 97+(char)i, ' ', ':' };
 		mvwprintw(win, 2+i, 2, gpr_name);
@@ -44,6 +53,17 @@ void displayCPU(WINDOW *win, CPU *cpu) {
 	mvwprintw(win, 2+i, 7, str_pad(dechept(cpu->getIP().to_int()), 3, 'D', STR_PAD_LEFT).c_str());
 	mvwprintw(win, 2+(++i), 2, "sp :");
 	mvwprintw(win, 2+i, 7, str_pad(dechept(cpu->getSP().to_int()), 3, 'D', STR_PAD_LEFT).c_str());
+
+	//flag
+	char flag_z[6] = {'z', ' ', ':', ' ', cpu->getZero().to_char(), NULL};
+	char flag_c[6] = {'c', ' ', ':', ' ', cpu->getCarry().to_char(), NULL};
+	char flag_f[6] = {'f', ' ', ':', ' ', cpu->getFault().to_char(), NULL};
+
+	mvwprintw(win, 2, 13, flag_z);
+	mvwprintw(win, 3, 13, flag_c);
+	mvwprintw(win, 4, 13, flag_f);
+
+
 
 	wrefresh(win);
 }
@@ -107,6 +127,7 @@ int main(int argc, char* argv[])
 
 	WINDOW *memoryWindow;
 	WINDOW *CPUWindow;
+	WINDOW *VideoWindow;
     
 	int ch;
     initscr();
@@ -118,6 +139,7 @@ int main(int argc, char* argv[])
 
 	memoryWindow = createMemoryWindow();
 	CPUWindow = createCPUWindow();
+	VideoWindow = createVideoWindow();
 
     while((ch = getch()) != KEY_F(1)) {
 		try {

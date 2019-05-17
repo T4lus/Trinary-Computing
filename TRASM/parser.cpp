@@ -46,62 +46,9 @@ int Parser::parse() {
 	
 	this->buildSizeMap();		// create size map
 	this->buildLabelMap();		// create label map
-	
-	// create code
-	for (auto op : this->maps.opMap) {
-		if (op_tab.find(op[opMapCol::mnemonic]) != op_tab.end()) {
-			try {
-				std::vector<Tryte> opmem = op_tab[op[opMapCol::mnemonic]].fct(op, this->maps);
-				for (auto mem : opmem) {
-					this->code.push_back(str_pad(dechept(mem.to_int()), 3, 'D', STR_PAD_LEFT) );
-				}
-			}
-			catch(std::string const& e) {
-				std::cout << e << std::endl;;
-				this->nbError++;
-			}
-		}
-	}
+	this->buildCode();			// create code
 
-	//========================
-	// debug
-	std::cout << " === DEBUG === " << std::endl;
-	std::cout << " -- label -- " << std::endl;
-	for (auto& item : this->maps.labelMap) {
-		std::cout << item.first << "\t : " << Tryte(item.second).str() << std::endl;
-	}
-	std::cout << std::endl;
-	std::cout << " -- memory -- " << std::endl;
-	for (auto op : this->maps.opMap) {
-		if (op_tab.find(op[opMapCol::mnemonic]) != op_tab.end()) {
-			std::cout << op_tab[op[opMapCol::mnemonic]].opcode << "\t : ";
-			try {
-				std::vector<Tryte> opmem = op_tab[op[opMapCol::mnemonic]].fct(op, this->maps);
-				for (auto mem : opmem) {
-					std::cout << "(" << mem.to_int() << ") " << mem.str() << " ";
-				}
-			}
-			catch(std::string const& e) {
-				std::cout << e;
-				this->nbError++;
-			}
-			
-			std::cout << std::endl;
-		}
-	}
-	std::cout << std::endl;
-	std::cout << " -- code -- " << std::endl;
-	int lineOffset = 0;
-	for (auto item : this->code) {
-		std::cout << item;
-		lineOffset++;
-		if (!(lineOffset % 13))
-			std::cout << std::endl;
-		else
-			std::cout << " ";
-	}
-	std::cout << std::endl;
-	//========================
+	this->debug();
 
 	std::cout << "Done, " << this->nbError << " error(s) detected" << std::endl;		
 	if (this->nbError)
@@ -123,7 +70,7 @@ int Parser::saveTrin() {
 }
 
 void Parser::buildSizeMap() {
-	std::cout << "Building size map" << std::endl;
+	std::cout << "Building size map ... ";
 	for (auto op : this->maps.opMap) {
 		int currentSize = 1;
 		
@@ -166,9 +113,11 @@ void Parser::buildSizeMap() {
 		} 
 		this->maps.sizeMap.push_back({op[opMapCol::mnemonic], currentSize});
 	}
+	std::cout << "done !" << std::endl;
 }
 
 void Parser::buildLabelMap() {
+	std::cout << "Building label map ... ";
 	int curentAddr = 0;
 	for (auto item : this->maps.sizeMap) {
 		if (item.size == 0) {
@@ -178,6 +127,66 @@ void Parser::buildLabelMap() {
 			curentAddr += item.size;
 		}
 	}
+	std::cout << "done !" << std::endl;
+}
+
+void Parser::buildCode() {
+	std::cout << "Building code ... ";
+	for (auto op : this->maps.opMap) {
+		if (op_tab.find(op[opMapCol::mnemonic]) != op_tab.end()) {
+			try {
+				std::vector<Tryte> opmem = op_tab[op[opMapCol::mnemonic]].fct(op, this->maps);
+				for (auto mem : opmem) {
+					this->code.push_back(str_pad(dechept(mem.to_int()), 3, 'D', STR_PAD_LEFT) );
+				}
+			}
+			catch(std::string const& e) {
+				std::cout << e << std::endl;;
+				this->nbError++;
+			}
+		}
+	}
+	std::cout << "done !" << std::endl;
+}
+
+void Parser::debug() {
+	std::cout << std::endl << " === DEBUG START === " << std::endl;
+	std::cout << " -- label -- " << std::endl;
+	for (auto& item : this->maps.labelMap) {
+		std::cout << item.first << "\t : " << str_pad(dechept(Tryte(item.second).to_int()), 3, 'D', STR_PAD_LEFT) << std::endl;
+	}
+	std::cout << std::endl;
+	std::cout << " -- memory -- " << std::endl;
+	for (auto op : this->maps.opMap) {
+		if (op_tab.find(op[opMapCol::mnemonic]) != op_tab.end()) {
+			std::cout << op_tab[op[opMapCol::mnemonic]].opcode << "\t : ";
+			try {
+				std::vector<Tryte> opmem = op_tab[op[opMapCol::mnemonic]].fct(op, this->maps);
+				for (auto mem : opmem) {
+					std::cout << str_pad(dechept(mem.to_int()), 3, 'D', STR_PAD_LEFT) <<  " ";
+				}
+			}
+			catch(std::string const& e) {
+				std::cout << e;
+				this->nbError++;
+			}
+			
+			std::cout << std::endl;
+		}
+	}
+	std::cout << std::endl;
+	std::cout << " -- code -- " << std::endl;
+	int lineOffset = 0;
+	for (auto item : this->code) {
+		std::cout << item;
+		lineOffset++;
+		if (!(lineOffset % 13))
+			std::cout << std::endl;
+		else
+			std::cout << " ";
+	}
+	std::cout << std::endl;
+	std::cout << " === DEBUG END === " << std::endl << std::endl;
 }
 
 void Parser::checkNbArg(std::vector<std::string> _opMap) {
@@ -200,7 +209,7 @@ std::vector<args_type_t> Parser::GetArgType(std::vector<std::string> _args) {
 			else
 				args_type.push_back(T_ADDRESS);
 		} 
-		else if (isInteger(arg) || isHex(arg)) {
+		else if (isInteger(arg) || isHex(arg) || isHept(arg)) {
 			args_type.push_back(T_NUMBER);
 		}
 		else {
@@ -243,7 +252,7 @@ int Parser::getValue(std::string _str, maps_t _map) {
 	else if (register_tab.find(_str) != register_tab.end()) { // Register
 		return register_tab[_str];
 	} 
-	else if (isInteger(_str) || isHex(_str)) { // Number
+	else if (isInteger(_str) || isHex(_str) || isHept(_str) ) { // Number
 		return getNumber(_str);
 	}
 	else if (!_str.compare(0, 1, "@")) { // Address
