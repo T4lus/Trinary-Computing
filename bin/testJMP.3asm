@@ -1,14 +1,8 @@
-start:
-    JMP end
-    NOOP
-    NOOP
-    NOOP
-    NOOP
-    NOOP
-    NOOP
-    NOOP
-    NOOP
-    NOOP
-    NOOP
-end:
-    JMP start
+
+JMP .start
+hello:
+    DATA "ceci est un test"
+
+.start:
+    LOAD ra, hello
+    LOAD rb, 27

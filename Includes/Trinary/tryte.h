@@ -142,6 +142,27 @@ public:
 		return true;
 	}
 
+	static Tryte NOT(Tryte &t1) {
+		Tryte tryte;
+		for (int idigit = 0; idigit < TRYTE_CTRIT; ++idigit)
+			tryte.rgdigit[idigit] = Trit::NOT(t1.rgdigit[idigit]);
+		return tryte;
+	}
+
+	static Tryte NOTT(Tryte &t1) {
+		Tryte tryte;
+		for (int idigit = 0; idigit < TRYTE_CTRIT; ++idigit)
+			tryte.rgdigit[idigit] = Trit::NOTT(t1.rgdigit[idigit]);
+		return tryte;
+	}
+
+	static Tryte NOTF(Tryte &t1) {
+		Tryte tryte;
+		for (int idigit = 0; idigit < TRYTE_CTRIT; ++idigit)
+			tryte.rgdigit[idigit] = Trit::NOTF(t1.rgdigit[idigit]);
+		return tryte;
+	}
+
 	static Tryte SHR(Tryte &t1, unsigned int nb) {
 		std::string start = t1.str().substr(0, t1.str().size()-nb );
 		start.insert(0, nb, 'U');

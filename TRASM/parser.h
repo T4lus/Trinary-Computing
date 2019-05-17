@@ -48,8 +48,8 @@ public:
 	static std::vector<args_type_t> GetArgType(std::vector<std::string>);
 	static Tryte GetRegisterAddress(std::string);
 
-	static std::vector<Tryte> NOP(std::vector<std::string>, maps_t);	
 	static std::vector<Tryte> HALT(std::vector<std::string>, maps_t);
+	static std::vector<Tryte> NOOP(std::vector<std::string>, maps_t);	
 	static std::vector<Tryte> LOAD(std::vector<std::string>, maps_t);
 	static std::vector<Tryte> DATA(std::vector<std::string>, maps_t);
 	

@@ -69,7 +69,7 @@ void displayMemory(WINDOW *win, Memory *mem) {
 	for(auto tryte:mem->getData()) {
 		mvwprintw(win, y, ((i+1)*4)+(page*56), str_pad(dechept(tryte.second.to_int()), 3, 'D', STR_PAD_LEFT).c_str()) ;
 		i++;
-		if (!(i % 14)) {
+		if (!(i % 13)) {
 			mvwprintw(win, y, ((page+1)*56), " | ") ;
 			i = 0;
 			y++;
@@ -98,11 +98,10 @@ int main(int argc, char* argv[])
 
 	std::string line;
 	int addr = 0;
-	while (!std::getline(infile, line).eof()) {
+	while (std::getline(infile, line)) {
 		std::vector<std::string> v{explode(line, ' ')};
 		for(auto n:v) {
-			mem->store(Tryte(addr) , Tryte(heptdec(n.c_str())));
-			addr++;
+			mem->store(Tryte(addr++) , Tryte(heptdec(n.c_str())));
 		}
 	}
 
@@ -125,7 +124,7 @@ int main(int argc, char* argv[])
 			cpu->step();
 		}
 		catch(std::string const& e) {
-			std::cout << e << std::endl;
+			mvprintw(12, 2, e.c_str());
 		}
 
 		displayCPU(CPUWindow, cpu);

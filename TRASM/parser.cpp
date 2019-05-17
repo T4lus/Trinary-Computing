@@ -24,7 +24,7 @@ int Parser::parse() {
 
 	//load File
 	std::ifstream infile(this->inFile.c_str());
-	while (!std::getline(infile, line).eof()) {
+	while (std::getline(infile, line)) {
 		lineNumber++;
 		line = line.substr(0, line.find("#"));
 		if (line == "")
@@ -95,7 +95,7 @@ int Parser::parse() {
 	for (auto item : this->code) {
 		std::cout << item;
 		lineOffset++;
-		if (!(lineOffset % 6))
+		if (!(lineOffset % 13))
 			std::cout << std::endl;
 		else
 			std::cout << " ";
@@ -260,10 +260,10 @@ int Parser::getValue(std::string _str, maps_t _map) {
 	return -1;
 }
 
-std::vector<Tryte> Parser::NOP(std::vector<std::string> _opMap, maps_t maps) {
+std::vector<Tryte> Parser::NOOP(std::vector<std::string> _opMap, maps_t maps) {
 	checkNbArg(_opMap);
 	std::vector<Tryte> memTab;
-	memTab = {op_tab["NOP"].value};
+	memTab = {op_tab["NOOP"].value};
 	return memTab;
 }
 std::vector<Tryte> Parser::HALT(std::vector<std::string> _opMap, maps_t maps) {
