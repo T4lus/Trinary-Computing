@@ -39,7 +39,7 @@ $(NAME_ASM): $(OBJS_ASM)
 		@$(ECHO) '\033[0;32m> $(NAME_ASM) Compiled Without error\033[0m'
 
 $(NAME_EMU): $(OBJS_EMU)
-		$(CC) $(CFLAGS) $(HFLAGS) -o $(NAME_EMU) $^ $(LDFLAGS)
+		$(CC) $(CFLAGS) $(HFLAGS) -o $(NAME_EMU) $^ $(LDFLAGS) -lncurses
 		@$(ECHO) '\033[0;32m> $(NAME_EMU) Compiled Without error\033[0m'
 
 $(NAME_TST): $(OBJS_TST)

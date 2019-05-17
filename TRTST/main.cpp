@@ -102,39 +102,44 @@ int main(int argc, char* argv[])
 	std::cout << t_test.str() << " : " << t_test.to_int() << std::endl;
 
 	std::cout << std::endl;
-	std::cout << "Tryble test : " << std::endl;
+	std::cout << "Tryte ++ test : " << std::endl;
 	
-	Tryble tr_test = "FFF";
-	for (int i = 0; i < 27; i++, tr_test++)
-		std::cout << tr_test.str() << " : " << tr_test.to_int() << std::endl;
+	t_test = 1093;
+	std::cout << t_test.str() << " : " << t_test.to_int() << " : " << dechept(t_test.to_int()) << std::endl;
 
+	Tryte tr_test = heptdec("000");
+	for (int i = 0; i < 30; i++, tr_test++)
+		std::cout << tr_test.str() << " : " << tr_test.to_int() << " : " << dechept(tr_test.to_int()) << std::endl;
+	
+	t_test = -1093;
+	std::cout << t_test.str() << " : " << t_test.to_int() << " : " << dechept(t_test.to_int()) << std::endl;
 
-	std::cout << std::endl;
-	std::cout << "Utils test : " << std::endl;
-	std::cout << "heptDec(000) - -9841: " << heptDec("000") << std::endl;
-	std::cout << "heptDec(DCX) - -15: " << heptDec("CX") << std::endl;
-	std::cout << "heptDec(DCZ) - -14: " << heptDec("CZ") << std::endl;
-	std::cout << "heptDec(DD0) - -13: " << heptDec("0") << std::endl; 
-	std::cout << "heptDec(DDC) - -1: " << heptDec("C") << std::endl; 
-	std::cout << "heptDec(DDD) - 0: " << heptDec("D") << std::endl;
-	std::cout << "heptDec(DDE) - 1: " << heptDec("E") << std::endl;
-	std::cout << "heptDec(DDZ) - 13: " << heptDec("Z") << std::endl;
-	std::cout << "heptDec(DE0) - 14: " << heptDec("E0") << std::endl;
-	std::cout << "heptDec(DE1) - 15: " << heptDec("E1") << std::endl;
-	std::cout << "heptDec(ZZZ) - 9841: " << heptDec("ZZZ") << std::endl;
+	// std::cout << std::endl;
+	// std::cout << "Utils test : " << std::endl;
+	// std::cout << "heptDec(000) - -9841: " << heptdec("000") << std::endl;
+	// std::cout << "heptDec(DCX) - -15: " << heptdec("DCX") << std::endl;
+	// std::cout << "heptDec(DCZ) - -14: " << heptdec("DCZ") << std::endl;
+	// std::cout << "heptDec(DD0) - -13: " << heptdec("DD0") << std::endl; 
+	// std::cout << "heptDec(DDC) - -1: " << heptdec("DDC") << std::endl; 
+	// std::cout << "heptDec(DDD) - 0: " << heptdec("DDD") << std::endl;
+	// std::cout << "heptDec(DDE) - 1: " << heptdec("DDE") << std::endl;
+	// std::cout << "heptDec(DDZ) - 13: " << heptdec("DDZ") << std::endl;
+	// std::cout << "heptDec(DE0) - 14: " << heptdec("DE0") << std::endl;
+	// std::cout << "heptDec(DE1) - 15: " << heptdec("DE1") << std::endl;
+	// std::cout << "heptDec(ZZZ) - 9841: " << heptdec("ZZZ") << std::endl;
 
-	std::cout << std::endl;
-	std::cout << "heptEnc(-9841) - 000: " << heptEnc(-9841) << std::endl;
-	std::cout << "heptEnc(-15) - CX: " << heptEnc(-15) << std::endl;
-	std::cout << "heptEnc(-14) - CZ: " << heptEnc(-14) << std::endl;
-	std::cout << "heptEnc(-13) - 0: " << heptEnc(-13) << std::endl; 
-	std::cout << "heptEnc(-1) - C: " << heptEnc(-1) << std::endl; 
-	std::cout << "heptEnc(0) - D: " << heptEnc(0) << std::endl;
-	std::cout << "heptEnc(1) - E: " << heptEnc(1) << std::endl;
-	std::cout << "heptEnc(13) - Z: " << heptEnc(13) << std::endl;
-	std::cout << "heptEnc(14) - E0: " << heptEnc(14) << std::endl;
-	std::cout << "heptEnc(15) - E1: " << heptEnc(15) << std::endl;
-	std::cout << "heptEnc(9841) - ZZZ: " << heptEnc(9841) << std::endl;
+	// std::cout << std::endl;
+	// std::cout << "dechept(-9841) - 000: " << dechept(-9841) << std::endl;
+	// std::cout << "dechept(-15) - CX: " << dechept(-15) << std::endl;
+	// std::cout << "dechept(-14) - CZ: " << dechept(-14) << std::endl;
+	// std::cout << "dechept(-13) - 0: " << dechept(-13) << std::endl; 
+	// std::cout << "dechept(-1) - C: " << dechept(-1) << std::endl; 
+	// std::cout << "dechept(0) - D: " << dechept(0) << std::endl;
+	// std::cout << "dechept(1) - E: " << dechept(1) << std::endl;
+	// std::cout << "dechept(13) - Z: " << dechept(13) << std::endl;
+	// std::cout << "dechept(14) - E0: " << dechept(14) << std::endl;
+	// std::cout << "dechept(15) - E1: " << dechept(15) << std::endl;
+	// std::cout << "dechept(9841) - ZZZ: " << dechept(9841) << std::endl;
 
 	return 0;
 }

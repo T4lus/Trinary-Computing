@@ -1,0 +1,14 @@
+start:
+    JMP end
+    NOOP
+    NOOP
+    NOOP
+    NOOP
+    NOOP
+    NOOP
+    NOOP
+    NOOP
+    NOOP
+    NOOP
+end:
+    JMP start

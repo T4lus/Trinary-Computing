@@ -2,6 +2,7 @@
 
 #include <Trinary/tryte.h>
 #include <Utils/utils.h>
+#include <Utils/string.h>
 
 #include "parser.h"
 
@@ -52,7 +53,7 @@ int Parser::parse() {
 			try {
 				std::vector<Tryte> opmem = op_tab[op[opMapCol::mnemonic]].fct(op, this->maps);
 				for (auto mem : opmem) {
-					this->code.push_back(heptEnc(mem.to_int()));
+					this->code.push_back(str_pad(dechept(mem.to_int()), 3, 'D', STR_PAD_LEFT) );
 				}
 			}
 			catch(std::string const& e) {
@@ -64,42 +65,42 @@ int Parser::parse() {
 
 	//========================
 	// debug
-	// std::cout << " === DEBUG === " << std::endl;
-	// std::cout << " -- label -- " << std::endl;
-	// for (auto& item : this->maps.labelMap) {
-	// 	std::cout << item.first << "\t : " << Tryte(item.second).str() << std::endl;
-	// }
-	// std::cout << std::endl;
-	// std::cout << " -- memory -- " << std::endl;
-	// for (auto op : this->maps.opMap) {
-	// 	if (op_tab.find(op[opMapCol::mnemonic]) != op_tab.end()) {
-	// 		std::cout << op_tab[op[opMapCol::mnemonic]].opcode << "\t : ";
-	// 		try {
-	// 			std::vector<Tryte> opmem = op_tab[op[opMapCol::mnemonic]].fct(op, this->maps);
-	// 			for (auto mem : opmem) {
-	// 				std::cout << "(" << mem.to_int() << ") " << mem.str() << " ";
-	// 			}
-	// 		}
-	// 		catch(std::string const& e) {
-	// 			std::cout << e;
-	// 			this->nbError++;
-	// 		}
+	std::cout << " === DEBUG === " << std::endl;
+	std::cout << " -- label -- " << std::endl;
+	for (auto& item : this->maps.labelMap) {
+		std::cout << item.first << "\t : " << Tryte(item.second).str() << std::endl;
+	}
+	std::cout << std::endl;
+	std::cout << " -- memory -- " << std::endl;
+	for (auto op : this->maps.opMap) {
+		if (op_tab.find(op[opMapCol::mnemonic]) != op_tab.end()) {
+			std::cout << op_tab[op[opMapCol::mnemonic]].opcode << "\t : ";
+			try {
+				std::vector<Tryte> opmem = op_tab[op[opMapCol::mnemonic]].fct(op, this->maps);
+				for (auto mem : opmem) {
+					std::cout << "(" << mem.to_int() << ") " << mem.str() << " ";
+				}
+			}
+			catch(std::string const& e) {
+				std::cout << e;
+				this->nbError++;
+			}
 			
-	// 		std::cout << std::endl;
-	// 	}
-	// }
-	// std::cout << std::endl;
-	// std::cout << " -- code -- " << std::endl;
-	// int lineOffset = 0;
-	// for (auto item : this->code) {
-	// 	std::cout << item;
-	// 	lineOffset++;
-	// 	if (!(lineOffset % 6))
-	// 		std::cout << std::endl;
-	// 	else
-	// 		std::cout << " ";
-	// }
-	// std::cout << std::endl;
+			std::cout << std::endl;
+		}
+	}
+	std::cout << std::endl;
+	std::cout << " -- code -- " << std::endl;
+	int lineOffset = 0;
+	for (auto item : this->code) {
+		std::cout << item;
+		lineOffset++;
+		if (!(lineOffset % 6))
+			std::cout << std::endl;
+		else
+			std::cout << " ";
+	}
+	std::cout << std::endl;
 	//========================
 
 	std::cout << "Done, " << this->nbError << " error(s) detected" << std::endl;		

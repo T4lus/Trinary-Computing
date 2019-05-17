@@ -5,6 +5,9 @@
 ** TUF syntax
 ** 1 TWord -> 27 Trit
 ** 
+
+** @REWORK
+
 */
 
 #ifndef TWORD_H
@@ -18,10 +21,11 @@
 
 #include "trit.h"
 
+#define TWORD_CTRIT 27
+#define TWORD_MAX	(std::pow(3, TWORD_CTRIT) - 1)/2
+
 class TWord {
 public:
-	static const int CTRIT = 27;
-	static const int TWord_MAX = 9841;
 
 	TWord() {
 	}
@@ -30,13 +34,13 @@ public:
 		int ival = int8;
 		bool fneg = ival < 0;
 
-		if (abs(int8) >= TWord_MAX)
+		if (abs(int8) >= TWORD_MAX)
 			ival = 0;
 
 		if (fneg)
 			ival = -ival;
 
-		for (int idigit = 0; idigit < CTRIT; ++idigit) {
+		for (int idigit = 0; idigit < TWORD_CTRIT; ++idigit) {
 			switch (ival % 3) {
 				case 0:
 					rgdigit[idigit] = 'U';
@@ -60,7 +64,7 @@ public:
 
 	TWord(const char *sz) {
 		int cch = strlen(sz);
-		assert(cch <= CTRIT);
+		assert(cch <= TWORD_CTRIT);
 		int itrit = 0;
 		while (cch > 0) {
 			--cch;
@@ -71,7 +75,7 @@ public:
 
 	int to_int() {
 		int iret = 0;
-		for (int idigit = CTRIT - 1; idigit >= 0; --idigit) {
+		for (int idigit = TWORD_CTRIT - 1; idigit >= 0; --idigit) {
 			iret *= 3;
 			switch ((char)rgdigit[idigit]) {
 				case 'T':
@@ -86,13 +90,13 @@ public:
 	}
 
 	Trit &operator[](int idx) {
-		assert(idx >= 0 && idx < CTRIT);
+		assert(idx >= 0 && idx < TWORD_CTRIT);
 		return rgdigit[idx];
 	}
 
 	TWord operator~() {
 		TWord TWord;
-		for (int idigit = 0; idigit < CTRIT; ++idigit)
+		for (int idigit = 0; idigit < TWORD_CTRIT; ++idigit)
 		{
 			TWord.rgdigit[idigit] = ~rgdigit[idigit];
 		}
@@ -101,19 +105,19 @@ public:
 
 	TWord operator&(TWord &other) {
 		TWord TWord;
-		for (int idigit = 0; idigit < CTRIT; ++idigit)
+		for (int idigit = 0; idigit < TWORD_CTRIT; ++idigit)
 			TWord[idigit] = rgdigit[idigit] & other.rgdigit[idigit];
 		return TWord;
 	}
 	TWord operator|(TWord &other) {
 		TWord TWord;
-		for (int idigit = 0; idigit < CTRIT; ++idigit)
+		for (int idigit = 0; idigit < TWORD_CTRIT; ++idigit)
 			TWord[idigit] = rgdigit[idigit] | other.rgdigit[idigit];
 		return TWord;
 	}
 	TWord operator^(TWord &other) {
 		TWord TWord;
-		for (int idigit = 0; idigit < CTRIT; ++idigit)
+		for (int idigit = 0; idigit < TWORD_CTRIT; ++idigit)
 			TWord[idigit] = rgdigit[idigit] ^ other.rgdigit[idigit];
 		return TWord;
 	}
@@ -123,7 +127,7 @@ public:
 	}
 
 	TWord operator++(int) {
-		for (int idigit = 0; idigit < CTRIT; ++idigit) {
+		for (int idigit = 0; idigit < TWORD_CTRIT; ++idigit) {
 			rgdigit[idigit]++;
 			if ((char)rgdigit[idigit] != 'F')
 				break;
@@ -132,7 +136,7 @@ public:
 	}
 
 	TWord operator--(int) {
-		for (int idigit = 0; idigit < CTRIT; ++idigit) {
+		for (int idigit = 0; idigit < TWORD_CTRIT; ++idigit) {
 			rgdigit[idigit]--;
 			if ((char)rgdigit[idigit] != 'T')
 				break;
@@ -141,7 +145,7 @@ public:
 	}
 
 	bool operator==(TWord &other) {
-		for (int idigit = 0; idigit < CTRIT; ++idigit) {
+		for (int idigit = 0; idigit < TWORD_CTRIT; ++idigit) {
 			if (((char)rgdigit[idigit] != (char)other.rgdigit[idigit]))
 				return false;
 		}
@@ -169,14 +173,14 @@ public:
 	operator int() = delete;
 
 	std::string str() {
-		reinterpret_cast<char&>(rgdigit[CTRIT]) = '\0';
+		reinterpret_cast<char&>(rgdigit[TWORD_CTRIT]) = '\0';
 		std::string str((char*)rgdigit);
 		std::reverse(str.begin(), str.end());
 		return str;
 	}
 
 private:
-	Trit rgdigit[CTRIT + 1];
+	Trit rgdigit[TWORD_CTRIT + 1];
 };
 
 #endif

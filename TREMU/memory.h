@@ -15,6 +15,7 @@
 #include <map>
 
 #include <Trinary/tryte.h>
+#include <Utils/utils.h>
 
 class Memory {
     
@@ -31,7 +32,7 @@ class Memory {
 
         Tryte load(Tryte address){
             if (address.to_int() < -1*(this->size-1)/2 || address.to_int() > (this->size-1)/2) {
-                throw "Memory access violation at " + address.str();
+                throw std::string("Memory access violation at " + dechept(address.to_int()));
             }
 
             this->lastAccess = address;
@@ -40,7 +41,7 @@ class Memory {
 
         void store(Tryte address, Tryte value) {
             if (address.to_int() < -1*(this->size-1)/2 || address.to_int() > (this->size-1)/2) {
-                throw "Memory access violation at " + address.str();
+                throw std::string("Memory access violation at " + dechept(address.to_int()));
             }
 
             this->lastAccess = address;
@@ -49,9 +50,17 @@ class Memory {
 
         void reset() {
             this->lastAccess = 0;
-            for (int i = 0; i <= this->size; i++) {
+            for (int i = 0; i <= this->size-1; i++) {
                 this->data[i - this->size/2] = Tryte(0);
             }
+        }
+
+        std::map<int, Tryte>getData() {
+            return this->data;
+        }
+
+        int getSize() {
+            return this->size;
         }
 
 };

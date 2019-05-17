@@ -31,7 +31,7 @@ public:
 		int ival = int8;
 		bool fneg = ival < 0;
 
-		if (abs(int8) >= TRYTE_MAX)
+		if (abs(int8) > TRYTE_MAX)
 			ival = 0;
 
 		if (fneg)
@@ -105,13 +105,24 @@ public:
 		return Tryte(to_int() + other.to_int());
 	}
 
-	Tryte operator++(int) {
+	Tryte operator++() {
 		for (int idigit = 0; idigit < TRYTE_CTRIT; ++idigit) {
 			rgdigit[idigit]++;
 			if ((char)rgdigit[idigit] != 'F')
 				break;
 		}
 		return *this;
+	}
+
+	Tryte operator++(int) {
+		Tryte old = *this;
+
+		for (int idigit = 0; idigit < TRYTE_CTRIT; ++idigit) {
+			rgdigit[idigit]++;
+			if ((char)rgdigit[idigit] != 'F')
+				break;
+		}
+		return old;
 	}
 
 	Tryte operator--(int) {
