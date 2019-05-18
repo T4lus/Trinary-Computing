@@ -119,6 +119,7 @@ int main(int argc, char* argv[])
 	std::string line;
 	int addr = 0;
 	while (std::getline(infile, line)) {
+		chomp(line);
 		std::vector<std::string> v{explode(line, ' ')};
 		for(auto n:v) {
 			mem->store(Tryte(addr++) , Tryte(heptdec(n.c_str())));

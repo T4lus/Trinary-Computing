@@ -6,6 +6,11 @@
 #include <string>
 #include <vector>
 
+void chomp(std::string& str) {
+    const auto pos = str.find_last_not_of("\r\n");
+    str.erase(pos + 1);
+}
+
 std::string trim(const std::string& str, const std::string& whitespace = " \t") {
 	const auto strBegin = str.find_first_not_of(whitespace);
 	if (strBegin == std::string::npos)
@@ -55,6 +60,20 @@ std::string fromRaw(std::string raw) {
 		str += c;
 	}
 	return str;
+}
+
+std::string toRaw(std::string str) {
+    std::string result;
+
+    for(auto c : str) {
+        switch(c) {
+			case '\r': result += "\\r"; break;
+            case '\n': result += "\\n"; break;
+            case '\t': result += "\\t"; break;
+			default: result += c; break;
+        }
+    }
+    return result;
 }
 
 #define STR_PAD_RIGHT   1

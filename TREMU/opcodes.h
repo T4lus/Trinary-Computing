@@ -1,6 +1,6 @@
+
 #ifndef OPCODES_H
 #define OPCODES_H
-
 
 namespace opcodes {
     enum opcodes {

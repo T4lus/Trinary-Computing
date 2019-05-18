@@ -125,7 +125,7 @@ class CPU {
         };
 
         Tryte pop() {
-            Tryte value = this->memory->load(++this->sp);
+            Tryte value = this->memory->load(this->sp++);
             if (this->sp > MAX_SP) {
                 throw std::string("Stack underflow");
             }
@@ -312,7 +312,7 @@ class CPU {
                     break;
                 case  opcodes::JZ_REGADDRESS:
                     regTo = checkGPR(this->memory->load(++this->ip));
-                    if (this->zero) {
+                    if (this->zero == Trit('T')) {
                         jump(this->gpr[regTo.to_int()]);
                     } else {
                         this->ip++;
@@ -320,7 +320,7 @@ class CPU {
                     break;
                 case  opcodes::JZ_ADDRESS:
                     number = this->memory->load(++this->ip);
-                    if (this->zero) {
+                    if (this->zero == Trit('T')) {
                         jump(number);
                     } else {
                         this->ip++;
@@ -328,7 +328,7 @@ class CPU {
                     break;
                 case  opcodes::JNZ_REGADDRESS:
                     regTo = checkGPR(this->memory->load(++this->ip));
-                    if (!this->zero) {
+                    if (this->zero != Trit('T')) {
                         jump(this->gpr[regTo.to_int()]);
                     } else {
                         this->ip++;
@@ -336,7 +336,7 @@ class CPU {
                     break;
                 case  opcodes::JNZ_ADDRESS:
                     number = this->memory->load(++this->ip);
-                    if (!this->zero) {
+                    if (this->zero != Trit('T')) {
                         jump(number);
                     } else {
                         this->ip++;

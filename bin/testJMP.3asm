@@ -1,8 +1,7 @@
 
-JMP .start
-hello:
-    DATA "ceci est un test"
 
 .start:
-    LOAD ra, hello
-    LOAD rb, 27
+    JMP .end
+
+.end:
+    JMP .start

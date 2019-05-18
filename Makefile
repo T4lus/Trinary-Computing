@@ -25,7 +25,7 @@ CC = g++
 RM = rm -f
 ECHO = echo -e
 
-CFLAGS += -std=c++11 -g
+CFLAGS += -std=c++14 -g
 HFLAGS = -I$(HDDIR)
 LDFLAGS = -L$(LIBDIR) -lpthread
 

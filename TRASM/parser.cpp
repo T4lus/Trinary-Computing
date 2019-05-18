@@ -1,4 +1,5 @@
 #include <functional>
+#include <regex>
 
 #include <Trinary/tryte.h>
 #include <Utils/utils.h>
@@ -27,6 +28,8 @@ int Parser::parse() {
 	while (std::getline(infile, line)) {
 		lineNumber++;
 		line = line.substr(0, line.find("#"));
+		chomp(line);
+
 		if (line == "")
 			continue;
 		line = reduce(line);
@@ -48,7 +51,7 @@ int Parser::parse() {
 	this->buildLabelMap();		// create label map
 	this->buildCode();			// create code
 
-	this->debug();
+	//this->debug();
 
 	std::cout << "Done, " << this->nbError << " error(s) detected" << std::endl;		
 	if (this->nbError)
