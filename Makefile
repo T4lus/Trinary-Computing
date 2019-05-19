@@ -12,9 +12,17 @@ SRCDIR = ./Sources/
 HDDIR = ./Includes/
 LIBDIR = ./Libs/
 
-SRCS_ASM = $(wildcard ./TRASM/*.cpp)
-SRCS_EMU = $(wildcard ./TREMU/*.cpp)
-SRCS_TST = $(wildcard ./TRTST/*.cpp)
+SRCS_UTILS= $(wildcard ./Includes/Utils/*.cpp)
+
+SRCS_ASM = $(wildcard ./TRASM/*.cpp) \
+			$(wildcard ./TRASM/parser/*.cpp) \
+			$(SRCS_UTILS)
+
+SRCS_EMU = $(wildcard ./TREMU/*.cpp) \
+			$(SRCS_UTILS)
+
+SRCS_TST = $(wildcard ./TRTST/*.cpp) \
+			$(SRCS_UTILS)
 
 OBJS_ASM = $(SRCS_ASM:.cpp=.o)
 OBJS_EMU = $(SRCS_EMU:.cpp=.o)
@@ -61,7 +69,12 @@ fclean: clean
 re: fclean all
 
 SRCList:
-	@$(ECHO) $(SRCS)
+	@$(ECHO) '\033[0;32m> $(NAME_ASM) sources :\033[0m'
+	@$(ECHO) $(SRCS_ASM)
+	@$(ECHO) '\033[0;32m> $(NAME_EMU) sources :\033[0m'
+	@$(ECHO) $(SRCS_EMU)
+	@$(ECHO) '\033[0;32m> $(NAME_TST) sources :\033[0m'
+	@$(ECHO) $(SRCS_TST)
 
 OBJList:
 	@$(ECHO) $(OBJS)

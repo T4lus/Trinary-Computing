@@ -1,17 +1,16 @@
-#ifndef STRING_UTILS_H
-#define STRING_UTILS_H
-
 #include <iostream>
 #include <map>
 #include <string>
 #include <vector>
+
+#include <Utils/utils.h>
 
 void chomp(std::string& str) {
     const auto pos = str.find_last_not_of("\r\n");
     str.erase(pos + 1);
 }
 
-std::string trim(const std::string& str, const std::string& whitespace = " \t") {
+std::string trim(const std::string& str, const std::string& whitespace) {
 	const auto strBegin = str.find_first_not_of(whitespace);
 	if (strBegin == std::string::npos)
 		return ""; // no content
@@ -22,7 +21,7 @@ std::string trim(const std::string& str, const std::string& whitespace = " \t") 
 	return str.substr(strBegin, strRange);
 }
 
-std::string reduce(const std::string& str, const std::string& fill = " ", const std::string& whitespace = " \t"){
+std::string reduce(const std::string& str, const std::string& fill, const std::string& whitespace){
 	// trim first
 	auto result = trim(str, whitespace);
 
@@ -76,10 +75,7 @@ std::string toRaw(std::string str) {
     return result;
 }
 
-#define STR_PAD_RIGHT   1
-#define STR_PAD_LEFT    2
-
-std::string str_pad(std::string s, int pad_size, char pad_char = ' ', int pad_type = STR_PAD_RIGHT) {
+std::string str_pad(std::string s, int pad_size, char pad_char, int pad_type) {
     if (s.size() < pad_size && (pad_type == STR_PAD_RIGHT || pad_type == STR_PAD_LEFT)) {
         s.insert((pad_type == STR_PAD_LEFT ? s.begin() : s.end()), pad_size - s.size(), pad_char);
     }
@@ -99,5 +95,3 @@ const std::vector<std::string> explode(const std::string& s, const char& c) {
 	
 	return v;
 }
-
-#endif

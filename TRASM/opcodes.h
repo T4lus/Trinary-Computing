@@ -30,6 +30,5 @@
 #define T_NUMBER      			8
 
 extern  std::map<std::string, op_t> op_tab;
-extern  std::map<std::string, int> register_tab;
 
 #endif

@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
 	Tryte t_test;
 	t_test = "TTTTTTTTT";
 	std::cout << t_test.str() << " : " << t_test.to_int() << std::endl;
-	t_test = "UUUUUUUUU";
+	t_test = "TTTFFFUUU";
 	std::cout << t_test.str() << " : " << t_test.to_int() << std::endl;
 	t_test = "FFFFFFFFF";
 	std::cout << t_test.str() << " : " << t_test.to_int() << std::endl;

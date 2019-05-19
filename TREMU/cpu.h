@@ -172,10 +172,10 @@ class CPU {
             Tryte instr = this->memory->load(this->ip);
 
             switch (instr.to_int()) {
-                case opcodes::HALT:
+                case opcodes::HLT:
                     return;
                     break;
-                case opcodes::NOOP:
+                case opcodes::NOP:
                     this->ip++;
                     break;
                 case opcodes::LOAD_REG_TO_REG:

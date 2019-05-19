@@ -3,28 +3,17 @@
 #include "parser.h"
 
 
-std::map<std::string, int> register_tab = {
-	{"ra", 0},	
-	{"rb", 1},
-	{"rc", 2},
-	{"rd", 3},
-
-	{"sp", 4},		//stack pointer
-	{"ip", 5},		//instruction pointer
-	{"lr", 6},		//link register
-
-	{"n2", 7},	//@TODO
-	{"n3", 8},	//@TODO
-};
-
 // {MNEMONIC, ARGS NUMBER, MODES, TRYTE VALUE, PARSE FUNCTION}
 std::map<std::string, op_t> op_tab = {
-	{"HALT", {"HALT", 0, {}, 0, &Parser::HALT}},
+	{"HLT", {"HTL", 0, {}, 9126, &Parser::HLT}},
 	
+	{"NOP", {"NOP", 0, {}, 0, &Parser::NOP}},
+
 	{"LOAD", {"LOAD", 2, {}, 1, &Parser::LOAD}},
 	
-	{"DATA", {"DATA",  1, {}, 10, &Parser::DATA}},
-	{"NOOP", {"NOOP", 0, {}, 11, &Parser::NOOP}},
+	{"DT", {"DT",  1, {}, 10, &Parser::DT}},
+	{"DW", {"DW",  1, {}, 11, &Parser::DW}},
+	{"DTW", {"DTW",  1, {}, 12, &Parser::DTW}},
 
 	{"CMP", {"CMP", 2, {}, 20, &Parser::CMP}},
 	

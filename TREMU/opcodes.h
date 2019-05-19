@@ -4,7 +4,8 @@
 
 namespace opcodes {
     enum opcodes {
-        HALT = 0,
+        HLT = 9126,
+        NOP = 0,
 
         LOAD_REG_TO_REG = 1,
         LOAD_REGADDRESS_TO_REG = 2,
@@ -15,8 +16,9 @@ namespace opcodes {
         LOAD_REG_TO_ADDRESS = 7,
         LOAD_NUMBER_TO_ADDRESS = 8,
         
-        DATA = 10,
-        NOOP = 11,
+        DT = 10,
+        DW = 11,
+        DTW = 12,
 
         CMP_REG_WITH_REG = 20,
         CMP_REGADDRESS_WITH_REG = 21,

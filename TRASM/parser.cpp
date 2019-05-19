@@ -3,10 +3,8 @@
 
 #include <Trinary/tryte.h>
 #include <Utils/utils.h>
-#include <Utils/string.h>
 
 #include "parser.h"
-
 
 
 Parser::Parser(std::string _inFile, std::string _outFile) {
@@ -82,8 +80,8 @@ void Parser::buildSizeMap() {
 				currentSize = 1;
 			}
 			else if (op_tab[op[opMapCol::mnemonic]].nb_args < 2) {
-				if ( !op_tab[op[opMapCol::mnemonic]].opcode.compare("DATA") ) {
-					currentSize = this->DATA(op, this->maps).size();
+				if ( !op_tab[op[opMapCol::mnemonic]].opcode.compare("DT") ) {
+					currentSize = this->DT(op, this->maps).size();
 				} 
 				else {
 					std::vector<args_type_t> argType = GetArgType({op[2]});
@@ -272,16 +270,16 @@ int Parser::getValue(std::string _str, maps_t _map) {
 	return -1;
 }
 
-std::vector<Tryte> Parser::NOOP(std::vector<std::string> _opMap, maps_t maps) {
+std::vector<Tryte> Parser::NOP(std::vector<std::string> _opMap, maps_t maps) {
 	checkNbArg(_opMap);
 	std::vector<Tryte> memTab;
-	memTab = {op_tab["NOOP"].value};
+	memTab = {op_tab["NOP"].value};
 	return memTab;
 }
-std::vector<Tryte> Parser::HALT(std::vector<std::string> _opMap, maps_t maps) {
+std::vector<Tryte> Parser::HLT(std::vector<std::string> _opMap, maps_t maps) {
 	checkNbArg(_opMap);
 	std::vector<Tryte> memTab;
-	memTab = {op_tab["HALT"].value};
+	memTab = {op_tab["HLT"].value};
 	return memTab;
 }
 std::vector<Tryte> Parser::LOAD(std::vector<std::string> _opMap, maps_t maps) {
@@ -303,7 +301,8 @@ std::vector<Tryte> Parser::LOAD(std::vector<std::string> _opMap, maps_t maps) {
 	memTab.push_back(getValue(_opMap[3], maps));
 	return memTab;
 }
-std::vector<Tryte> Parser::DATA(std::vector<std::string> _opMap, maps_t maps) {
+
+std::vector<Tryte> Parser::DT(std::vector<std::string> _opMap, maps_t maps) {
 	std::vector<Tryte> memTab;
 
 	if (isInteger(_opMap[2]) || isHex(_opMap[2])) {
@@ -317,6 +316,19 @@ std::vector<Tryte> Parser::DATA(std::vector<std::string> _opMap, maps_t maps) {
 	}
 	return memTab;
 }
+
+std::vector<Tryte> Parser::DW(std::vector<std::string> _opMap, maps_t maps) {
+	std::vector<Tryte> memTab;
+
+	return memTab;
+}
+
+std::vector<Tryte> Parser::DTW(std::vector<std::string> _opMap, maps_t maps) {
+	std::vector<Tryte> memTab;
+
+	return memTab;
+}
+
 std::vector<Tryte> Parser::CMP(std::vector<std::string> _opMap, maps_t maps) {
 	checkNbArg(_opMap);
 	std::vector<Tryte> memTab;
@@ -325,245 +337,6 @@ std::vector<Tryte> Parser::CMP(std::vector<std::string> _opMap, maps_t maps) {
 	if (args_type[1] == T_REGISTER_ADDRESS) 	memTab.push_back(op_tab["CMP"].value + 1);
 	if (args_type[1] == T_ADDRESS) 				memTab.push_back(op_tab["CMP"].value + 2);
 	if (args_type[1] == T_NUMBER) 				memTab.push_back(op_tab["CMP"].value + 3);
-	memTab.push_back(getValue(_opMap[2], maps));
-	memTab.push_back(getValue(_opMap[3], maps));
-	return memTab;
-}
-std::vector<Tryte> Parser::JMP(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	std::vector<args_type_t> args_type = GetArgType({_opMap[2]});
-	if (args_type[0] == T_REGISTER) memTab.push_back(op_tab["JMP"].value);
-	if (args_type[0] != T_REGISTER) memTab.push_back(op_tab["JMP"].value + 1);
-	memTab.push_back(getValue(_opMap[2], maps));
-	return memTab;
-}
-std::vector<Tryte> Parser::JC(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	std::vector<args_type_t> args_type = GetArgType({_opMap[2]});
-	if (args_type[0] == T_REGISTER) memTab.push_back(op_tab["JC"].value);
-	if (args_type[0] != T_REGISTER) memTab.push_back(op_tab["JC"].value + 1);
-	memTab.push_back(getValue(_opMap[2], maps));
-	return memTab;
-}
-std::vector<Tryte> Parser::JNC(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	std::vector<args_type_t> args_type = GetArgType({_opMap[2]});
-	if (args_type[0] == T_REGISTER) memTab.push_back(op_tab["JNC"].value);
-	if (args_type[0] != T_REGISTER) memTab.push_back(op_tab["JNC"].value + 1);
-	memTab.push_back(getValue(_opMap[2], maps));
-	return memTab;
-}
-std::vector<Tryte> Parser::JUC(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	std::vector<args_type_t> args_type = GetArgType({_opMap[2]});
-	if (args_type[0] == T_REGISTER) memTab.push_back(op_tab["JUC"].value);
-	if (args_type[0] != T_REGISTER) memTab.push_back(op_tab["JUC"].value + 1);
-	memTab.push_back(getValue(_opMap[2], maps));
-	return memTab;
-}
-std::vector<Tryte> Parser::JZ(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	std::vector<args_type_t> args_type = GetArgType({_opMap[2]});
-	if (args_type[0] == T_REGISTER) memTab.push_back(op_tab["JUC"].value);
-	if (args_type[0] != T_REGISTER) memTab.push_back(op_tab["JUC"].value + 1);
-	memTab.push_back(getValue(_opMap[2], maps));
-	return memTab;
-}
-std::vector<Tryte> Parser::JNZ(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	std::vector<args_type_t> args_type = GetArgType({_opMap[2]});
-	if (args_type[0] == T_REGISTER) memTab.push_back(op_tab["JNZ"].value);
-	if (args_type[0] != T_REGISTER) memTab.push_back(op_tab["JNZ"].value + 1);
-	memTab.push_back(getValue(_opMap[2], maps));
-	return memTab;
-}
-std::vector<Tryte> Parser::JUZ(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	std::vector<args_type_t> args_type = GetArgType({_opMap[2]});
-	if (args_type[0] == T_REGISTER) memTab.push_back(op_tab["JUZ"].value);
-	if (args_type[0] != T_REGISTER) memTab.push_back(op_tab["JUZ"].value + 1);
-	memTab.push_back(getValue(_opMap[2], maps));
-	return memTab;
-}
-std::vector<Tryte> Parser::PUSH(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	std::vector<args_type_t> args_type = GetArgType({_opMap[2]});
-	if (args_type[0] == T_REGISTER) 		memTab.push_back(op_tab["PUSH"].value);
-	if (args_type[0] == T_REGISTER_ADDRESS) memTab.push_back(op_tab["PUSH"].value + 1);
-	if (args_type[0] == T_ADDRESS) 			memTab.push_back(op_tab["PUSH"].value + 2);
-	if (args_type[0] == T_NUMBER) 			memTab.push_back(op_tab["PUSH"].value + 3);
-	memTab.push_back(getValue(_opMap[2], maps));
-	return memTab;
-}
-std::vector<Tryte> Parser::POP(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	memTab.push_back(op_tab["POP"].value);
-	memTab.push_back(getValue(_opMap[2], maps));
-	return memTab;
-}
-std::vector<Tryte> Parser::CALL(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	std::vector<args_type_t> args_type = GetArgType({_opMap[2]});
-	if (args_type[0] == T_REGISTER) memTab.push_back(op_tab["CALL"].value);
-	if (args_type[0] != T_REGISTER) memTab.push_back(op_tab["CALL"].value + 1);
-	memTab.push_back(getValue(_opMap[2], maps));
-	return memTab;
-}
-std::vector<Tryte> Parser::RET(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	memTab.push_back(op_tab["RET"].value);
-	return memTab;
-}
-std::vector<Tryte> Parser::INC(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	memTab.push_back(op_tab["INC"].value);
-	memTab.push_back(getValue(_opMap[2], maps));
-	return memTab;
-}
-std::vector<Tryte> Parser::DEC(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	memTab.push_back(op_tab["DEC"].value);
-	memTab.push_back(getValue(_opMap[2], maps));
-	return memTab;
-}
-std::vector<Tryte> Parser::ADD(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	std::vector<args_type_t> args_type = GetArgType({_opMap[2], _opMap[3]});
-	if (args_type[1] == T_REGISTER) 			memTab.push_back(op_tab["ADD"].value);
-	if (args_type[1] == T_REGISTER_ADDRESS) 	memTab.push_back(op_tab["ADD"].value + 1);
-	if (args_type[1] == T_ADDRESS) 				memTab.push_back(op_tab["ADD"].value + 2);
-	if (args_type[1] == T_NUMBER) 				memTab.push_back(op_tab["ADD"].value + 3);
-	memTab.push_back(getValue(_opMap[2], maps));
-	memTab.push_back(getValue(_opMap[3], maps));
-	return memTab;
-}
-std::vector<Tryte> Parser::SUB(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	std::vector<args_type_t> args_type = GetArgType({_opMap[2], _opMap[3]});
-	if (args_type[1] == T_REGISTER) 			memTab.push_back(op_tab["SUB"].value);
-	if (args_type[1] == T_REGISTER_ADDRESS) 	memTab.push_back(op_tab["SUB"].value + 1);
-	if (args_type[1] == T_ADDRESS) 				memTab.push_back(op_tab["SUB"].value + 2);
-	if (args_type[1] == T_NUMBER) 				memTab.push_back(op_tab["SUB"].value + 3);
-	memTab.push_back(getValue(_opMap[2], maps));
-	memTab.push_back(getValue(_opMap[3], maps));
-	return memTab;
-}
-std::vector<Tryte> Parser::MUL(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	std::vector<args_type_t> args_type = GetArgType({_opMap[2], _opMap[3]});
-	if (args_type[1] == T_REGISTER) 			memTab.push_back(op_tab["MUL"].value);
-	if (args_type[1] == T_REGISTER_ADDRESS) 	memTab.push_back(op_tab["MUL"].value + 1);
-	if (args_type[1] == T_ADDRESS) 				memTab.push_back(op_tab["MUL"].value + 2);
-	if (args_type[1] == T_NUMBER) 				memTab.push_back(op_tab["MUL"].value + 3);
-	memTab.push_back(getValue(_opMap[2], maps));
-	memTab.push_back(getValue(_opMap[3], maps));
-	return memTab;
-}
-std::vector<Tryte> Parser::DIV(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	std::vector<args_type_t> args_type = GetArgType({_opMap[2], _opMap[3]});
-	if (args_type[1] == T_REGISTER) 			memTab.push_back(op_tab["DIV"].value);
-	if (args_type[1] == T_REGISTER_ADDRESS) 	memTab.push_back(op_tab["DIV"].value + 1);
-	if (args_type[1] == T_ADDRESS) 				memTab.push_back(op_tab["DIV"].value + 2);
-	if (args_type[1] == T_NUMBER) 				memTab.push_back(op_tab["DIV"].value + 3);
-	memTab.push_back(getValue(_opMap[2], maps));
-	memTab.push_back(getValue(_opMap[3], maps));
-	return memTab;
-}
-std::vector<Tryte> Parser::AND(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	std::vector<args_type_t> args_type = GetArgType({_opMap[2], _opMap[3]});
-	if (args_type[1] == T_REGISTER) 			memTab.push_back(op_tab["AND"].value);
-	if (args_type[1] == T_REGISTER_ADDRESS) 	memTab.push_back(op_tab["AND"].value + 1);
-	if (args_type[1] == T_ADDRESS) 				memTab.push_back(op_tab["AND"].value + 2);
-	if (args_type[1] == T_NUMBER) 				memTab.push_back(op_tab["AND"].value + 3);
-	memTab.push_back(getValue(_opMap[2], maps));
-	memTab.push_back(getValue(_opMap[3], maps));
-	return memTab;
-}
-std::vector<Tryte> Parser::OR(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	std::vector<args_type_t> args_type = GetArgType({_opMap[2], _opMap[3]});
-	if (args_type[1] == T_REGISTER) 			memTab.push_back(op_tab["OR"].value);
-	if (args_type[1] == T_REGISTER_ADDRESS) 	memTab.push_back(op_tab["OR"].value + 1);
-	if (args_type[1] == T_ADDRESS) 				memTab.push_back(op_tab["OR"].value + 2);
-	if (args_type[1] == T_NUMBER) 				memTab.push_back(op_tab["OR"].value + 3);
-	memTab.push_back(getValue(_opMap[2], maps));
-	memTab.push_back(getValue(_opMap[3], maps));
-	return memTab;
-}
-std::vector<Tryte> Parser::XOR(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	std::vector<args_type_t> args_type = GetArgType({_opMap[2], _opMap[3]});
-	if (args_type[1] == T_REGISTER) 			memTab.push_back(op_tab["XOR"].value);
-	if (args_type[1] == T_REGISTER_ADDRESS) 	memTab.push_back(op_tab["XOR"].value + 1);
-	if (args_type[1] == T_ADDRESS) 				memTab.push_back(op_tab["XOR"].value + 2);
-	if (args_type[1] == T_NUMBER) 				memTab.push_back(op_tab["XOR"].value + 3);
-	memTab.push_back(getValue(_opMap[2], maps));
-	memTab.push_back(getValue(_opMap[3], maps));
-	return memTab;
-}
-std::vector<Tryte> Parser::NOT(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	memTab.push_back(op_tab["NOT"].value);
-	memTab.push_back(getValue(_opMap[2], maps));
-	return memTab;
-}
-std::vector<Tryte> Parser::NOTT(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	memTab.push_back(op_tab["NOTT"].value);
-	memTab.push_back(getValue(_opMap[2], maps));
-	return memTab;
-}
-std::vector<Tryte> Parser::NOTF(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	memTab.push_back(op_tab["NOTF"].value);
-	memTab.push_back(getValue(_opMap[2], maps));
-	return memTab;
-}
-std::vector<Tryte> Parser::SHL(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	std::vector<args_type_t> args_type = GetArgType({_opMap[2], _opMap[3]});
-	if (args_type[1] == T_REGISTER) 			memTab.push_back(op_tab["SHL"].value);
-	if (args_type[1] == T_REGISTER_ADDRESS) 	memTab.push_back(op_tab["SHL"].value + 1);
-	if (args_type[1] == T_ADDRESS) 				memTab.push_back(op_tab["SHL"].value + 2);
-	if (args_type[1] == T_NUMBER) 				memTab.push_back(op_tab["SHL"].value + 3);
-	memTab.push_back(getValue(_opMap[2], maps));
-	memTab.push_back(getValue(_opMap[3], maps));
-	return memTab;
-}
-std::vector<Tryte> Parser::SHR(std::vector<std::string> _opMap, maps_t maps) {
-	checkNbArg(_opMap);
-	std::vector<Tryte> memTab;
-	std::vector<args_type_t> args_type = GetArgType({_opMap[2], _opMap[3]});
-	if (args_type[1] == T_REGISTER) 			memTab.push_back(op_tab["SHR"].value);
-	if (args_type[1] == T_REGISTER_ADDRESS) 	memTab.push_back(op_tab["SHR"].value + 1);
-	if (args_type[1] == T_ADDRESS) 				memTab.push_back(op_tab["SHR"].value + 2);
-	if (args_type[1] == T_NUMBER) 				memTab.push_back(op_tab["SHR"].value + 3);
 	memTab.push_back(getValue(_opMap[2], maps));
 	memTab.push_back(getValue(_opMap[3], maps));
 	return memTab;

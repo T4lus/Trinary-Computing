@@ -12,6 +12,10 @@
 
 #include <ncurses.h>
 
+// #ifndef NO_GRAPHICS
+// 	#include <SDL.h>
+// #endif
+
 #include <Trinary/trinary.h>
 #include <Utils/utils.h>
 
@@ -19,6 +23,10 @@
 #include "memory.h"
 
 std::string execPath;
+
+// #ifndef NO_GRAPHICS
+// SDL_Surface *sdl_screen;
+// #endif
 
 WINDOW *createVideoWindow() {
 	WINDOW *localWin;
@@ -104,6 +112,11 @@ void displayMemory(WINDOW *win, Memory *mem) {
 
 int main(int argc, char* argv[])
 {
+
+	// #ifndef NO_GRAPHICS
+	// 	SDL_Init(SDL_INIT_VIDEO);
+	// #endif
+
 	char basePath[255] = "";
 	realpath(argv[0], basePath);
 	execPath = basePath;

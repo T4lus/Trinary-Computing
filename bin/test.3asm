@@ -3,14 +3,14 @@
 
 JMP start
 hello: 
-	DATA "Hello World!" 		# Variable
-    DATA 0						# String terminator
+	DT "Hello World!" 		# Variable
+    DT 0						# String terminator
 
 start:
 	LOAD rc, hello    			# Point to var 
 	LOAD rd, 3xC00				# Point to output
 	CALL print
-    HALT	             		# Stop execution
+    HLT	             		# Stop execution
 
 print:							# print(C:*from, D:*to)
 	PUSH ra

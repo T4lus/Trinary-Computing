@@ -19,6 +19,8 @@
 #include "types.h"
 
 
+extern  std::map<std::string, int> register_tab;
+
 class Parser {
 private:
 	std::string 				inFile;
@@ -50,10 +52,13 @@ public:
 	static std::vector<args_type_t> GetArgType(std::vector<std::string>);
 	static Tryte GetRegisterAddress(std::string);
 
-	static std::vector<Tryte> HALT(std::vector<std::string>, maps_t);
-	static std::vector<Tryte> NOOP(std::vector<std::string>, maps_t);	
+	static std::vector<Tryte> HLT(std::vector<std::string>, maps_t);
+	static std::vector<Tryte> NOP(std::vector<std::string>, maps_t);	
 	static std::vector<Tryte> LOAD(std::vector<std::string>, maps_t);
-	static std::vector<Tryte> DATA(std::vector<std::string>, maps_t);
+
+	static std::vector<Tryte> DT(std::vector<std::string>, maps_t);
+	static std::vector<Tryte> DW(std::vector<std::string>, maps_t);
+	static std::vector<Tryte> DTW(std::vector<std::string>, maps_t);
 	
 	static std::vector<Tryte> CMP(std::vector<std::string>, maps_t);
 	
