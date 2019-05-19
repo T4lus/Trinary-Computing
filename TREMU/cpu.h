@@ -262,9 +262,10 @@ class CPU {
                     number = this->memory->load(++this->ip);
                     this->jump(number);
                     break;
+
                 case  opcodes::JC_REGADDRESS:
                     regTo = checkGPR(this->memory->load(++this->ip));
-                    if (this->carry) {
+                    if (this->carry == Trit('T')) {
                         jump(this->gpr[regTo.to_int()]);
                     } else {
                         this->ip++;
@@ -272,7 +273,7 @@ class CPU {
                     break;
                 case  opcodes::JC_ADDRESS:
                     number = this->memory->load(++this->ip);
-                    if (this->carry) {
+                    if (this->carry == Trit('T')) {
                         jump(number);
                     } else {
                         this->ip++;
@@ -280,7 +281,7 @@ class CPU {
                     break;
                 case  opcodes::JNC_REGADDRESS:
                     regTo = checkGPR(this->memory->load(++this->ip));
-                    if (!this->carry) {
+                    if (this->carry != Trit('T')) {
                         jump(this->gpr[regTo.to_int()]);
                     } else {
                         this->ip++;
@@ -288,7 +289,7 @@ class CPU {
                     break;
                 case  opcodes::JNC_ADDRESS:
                     number = this->memory->load(++this->ip);
-                    if (!this->carry) {
+                    if (this->carry != Trit('T')) {
                         jump(number);
                     } else {
                         this->ip++;
@@ -296,7 +297,7 @@ class CPU {
                     break;
                 case  opcodes::JUC_REGADDRESS:
                     regTo = checkGPR(this->memory->load(++this->ip));
-                    if (!this->carry) {
+                    if (this->carry == Trit('U')) {
                         jump(this->gpr[regTo.to_int()]);
                     } else {
                         this->ip++;
@@ -304,7 +305,7 @@ class CPU {
                     break;
                 case  opcodes::JUC_ADDRESS:
                     number = this->memory->load(++this->ip);
-                    if (!this->carry) {
+                    if (this->carry == Trit('U')) {
                         jump(number);
                     } else {
                         this->ip++;
@@ -344,7 +345,7 @@ class CPU {
                     break;
                 case  opcodes::JUZ_REGADDRESS:
                     regTo = checkGPR(this->memory->load(++this->ip));
-                    if (!this->zero) {
+                    if (this->zero == Trit('U')) {
                         jump(this->gpr[regTo.to_int()]);
                     } else {
                         this->ip++;
@@ -352,7 +353,7 @@ class CPU {
                     break;
                 case  opcodes::JUZ_ADDRESS:
                     number = this->memory->load(++this->ip);
-                    if (!this->zero) {
+                    if (this->zero == Trit('U')) {
                         jump(number);
                     } else {
                         this->ip++;
@@ -400,60 +401,62 @@ class CPU {
 
                 case  opcodes::INC_REG:
                     regTo = checkGPR_SP(this->memory->load(++this->ip));
-                    setGPR_SP(regTo,checkOperation(getGPR_SP(regTo) + 1));
+                    setGPR_SP(regTo, checkOperation(getGPR_SP(regTo) + 1));
                     this->ip++;
                     break;
                 case  opcodes::DEC_REG:
                     regTo = checkGPR_SP(this->memory->load(++this->ip));
-                    setGPR_SP(regTo,checkOperation(getGPR_SP(regTo) - 1));
+                    setGPR_SP(regTo, checkOperation(getGPR_SP(regTo) - 1));
                     this->ip++;
                     break;
+                    
                 case  opcodes::ADD_REG_TO_REG:
                     regTo = checkGPR_SP(this->memory->load(++this->ip));
                     regFrom = checkGPR_SP(this->memory->load(++this->ip));
-                    setGPR_SP(regTo,checkOperation(getGPR_SP(regTo) + getGPR_SP(regFrom)));
+                    setGPR_SP(regTo, checkOperation(getGPR_SP(regTo) + getGPR_SP(regFrom)));
                     this->ip++;
                     break;
                 case  opcodes::ADD_REGADDRESS_TO_REG:
                     regTo = checkGPR_SP(this->memory->load(++this->ip));
                     regFrom = this->memory->load(++this->ip);
-                    setGPR_SP(regTo,checkOperation(getGPR_SP(regTo) + this->memory->load(indirectRegisterAddress(regFrom))));
+                    setGPR_SP(regTo, checkOperation(getGPR_SP(regTo) + this->memory->load(indirectRegisterAddress(regFrom))));
                     this->ip++;
                     break;
                 case  opcodes::ADD_ADDRESS_TO_REG:
                     regTo = checkGPR_SP(this->memory->load(++this->ip));
                     memFrom = this->memory->load(++this->ip);
-                    setGPR_SP(regTo,checkOperation(getGPR_SP(regTo) + this->memory->load(memFrom)));
+                    setGPR_SP(regTo, checkOperation(getGPR_SP(regTo) + this->memory->load(memFrom)));
                     this->ip++;
                     break;
                 case  opcodes::ADD_NUMBER_TO_REG:
                     regTo = checkGPR_SP(this->memory->load(++this->ip));
                     number = this->memory->load(++this->ip);
-                    setGPR_SP(regTo,checkOperation(getGPR_SP(regTo) + number));
+                    setGPR_SP(regTo, checkOperation(getGPR_SP(regTo) + number));
                     this->ip++;
                     break;
+
                 case  opcodes::SUB_REG_FROM_REG:
                     regTo = checkGPR_SP(this->memory->load(++this->ip));
                     regFrom = checkGPR_SP(this->memory->load(++this->ip));
-                    setGPR_SP(regTo,checkOperation(getGPR_SP(regTo) - this->gpr[regFrom.to_int()]));
+                    setGPR_SP(regTo, checkOperation(getGPR_SP(regTo) - this->gpr[regFrom.to_int()]));
                     this->ip++;
                     break;
                 case  opcodes::SUB_REGADDRESS_FROM_REG:
                     regTo = checkGPR_SP(this->memory->load(++this->ip));
                     regFrom = this->memory->load(++this->ip);
-                    setGPR_SP(regTo,checkOperation(getGPR_SP(regTo) - this->memory->load(indirectRegisterAddress(regFrom))));
+                    setGPR_SP(regTo, checkOperation(getGPR_SP(regTo) - this->memory->load(indirectRegisterAddress(regFrom))));
                     this->ip++;
                     break;
                 case  opcodes::SUB_ADDRESS_FROM_REG:
                     regTo = checkGPR_SP(this->memory->load(++this->ip));
                     memFrom = this->memory->load(++this->ip);
-                    setGPR_SP(regTo,checkOperation(getGPR_SP(regTo) - this->memory->load(memFrom)));
+                    setGPR_SP(regTo, checkOperation(getGPR_SP(regTo) - this->memory->load(memFrom)));
                     this->ip++;
                     break;
                 case  opcodes::SUB_NUMBER_FROM_REG:
                     regTo = checkGPR_SP(this->memory->load(++this->ip));
                     number = this->memory->load(++this->ip);
-                    setGPR_SP(regTo,checkOperation(getGPR_SP(regTo) - number));
+                    setGPR_SP(regTo, checkOperation(getGPR_SP(regTo) - number));
                     this->ip++;
                     break;
                 
@@ -477,6 +480,7 @@ class CPU {
                     this->gpr[0] = checkOperation(this->gpr[0] * number);
                     this->ip++;
                     break;
+
                 case  opcodes::DIV_REG: // A = A / REG
                     regFrom = checkGPR(this->memory->load(++this->ip));
                     this->gpr[0] = checkOperation(division(this->gpr[regFrom.to_int()]));
@@ -522,6 +526,7 @@ class CPU {
                     this->gpr[regTo.to_int()] = checkOperation(this->gpr[regTo.to_int()] & number);
                     this->ip++;
                     break;
+
                 case  opcodes::OR_REG_WITH_REG:
                     regTo = checkGPR(this->memory->load(++this->ip));
                     regFrom = checkGPR(this->memory->load(++this->ip));
@@ -546,6 +551,7 @@ class CPU {
                     this->gpr[regTo.to_int()] = checkOperation(this->gpr[regTo.to_int()] | number);
                     this->ip++;
                     break;
+
                 case  opcodes::XOR_REG_WITH_REG:
                     regTo = checkGPR(this->memory->load(++this->ip));
                     regFrom = checkGPR(this->memory->load(++this->ip));
