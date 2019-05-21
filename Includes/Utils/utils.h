@@ -28,6 +28,7 @@ static const std::string HEPT_CHARS = "0123456789ABCDEFGHKMNPRTVXZ";
 int heptdec(std::string s);
 std::string dechept(int value);
 
+bool isNumber(std::string s);
 bool isInteger(std::string s);
 bool isHept(std::string s);
 bool isHex(std::string s);

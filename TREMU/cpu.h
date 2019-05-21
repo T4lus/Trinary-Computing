@@ -178,49 +178,49 @@ class CPU {
                 case opcodes::NOP:
                     this->ip++;
                     break;
-                case opcodes::LOAD_REG_TO_REG:
+                case opcodes::MOV_REG_TO_REG:
                     regTo = checkGPR_SP(memory->load(++this->ip));
                     regFrom = checkGPR_SP(memory->load(++this->ip));
                     setGPR_SP(regTo, getGPR_SP(regFrom));
                     this->ip++;
                     break;
-                case opcodes::LOAD_ADDRESS_TO_REG:
+                case opcodes::MOV_ADDRESS_TO_REG:
                     regTo = checkGPR_SP(memory->load(++this->ip));
                     memFrom = memory->load(++this->ip);
                     setGPR_SP(regTo, memory->load(memFrom));
                     this->ip++;
                     break;
-                case opcodes::LOAD_REGADDRESS_TO_REG:
+                case opcodes::MOV_REGADDRESS_TO_REG:
                     regTo = checkGPR_SP(memory->load(++this->ip));
                     regFrom = memory->load(++this->ip);
                     setGPR_SP(regTo,memory->load(indirectRegisterAddress(regFrom)));
                     this->ip++;
                     break;
-                case opcodes::LOAD_REG_TO_ADDRESS:
+                case opcodes::MOV_REG_TO_ADDRESS:
                     memTo = memory->load(++this->ip);
                     regFrom = checkGPR_SP(memory->load(++this->ip));
                     memory->store(memTo, getGPR_SP(regFrom));
                     this->ip++;
                     break;
-                case opcodes::LOAD_REG_TO_REGADDRESS:
+                case opcodes::MOV_REG_TO_REGADDRESS:
                     regTo = memory->load(++this->ip);
                     regFrom = checkGPR_SP(memory->load(++this->ip));
                     memory->store(indirectRegisterAddress(regTo), getGPR_SP(regFrom));
                     this->ip++;
                     break;
-                case opcodes::LOAD_NUMBER_TO_REG:
+                case opcodes::MOV_NUMBER_TO_REG:
                     regTo = checkGPR_SP(memory->load(++this->ip));
                     number = memory->load(++this->ip);
                     setGPR_SP(regTo, number);
                     this->ip++;
                     break;
-                case opcodes::LOAD_NUMBER_TO_ADDRESS:
+                case opcodes::MOV_NUMBER_TO_ADDRESS:
                     memTo = memory->load(++this->ip);
                     number = memory->load(++this->ip);
                     memory->store(memTo, number);
                     this->ip++;
                     break;
-                case opcodes::LOAD_NUMBER_TO_REGADDRESS:
+                case opcodes::MOV_NUMBER_TO_REGADDRESS:
                     regTo = memory->load(++this->ip);
                     number = memory->load(++this->ip);
                     memory->store(indirectRegisterAddress(regTo), number);

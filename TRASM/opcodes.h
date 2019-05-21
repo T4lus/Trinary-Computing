@@ -24,10 +24,19 @@
 #define TOKEN_SEPARATOR 	','
 #define LABEL_CHARS			"abcdefghijklmnopqrstuvwxyz_0123456789"
 
+// #define T_REGISTER				1
+// #define T_REGISTER_ADDRESS     	2
+// #define T_ADDRESS       		4
+// #define T_NUMBER      			8
+
+#define T_REGISTER_ADDRESS
+
 #define T_REGISTER				1
-#define T_REGISTER_ADDRESS     	2
-#define T_ADDRESS       		4
-#define T_NUMBER      			8
+#define T_NUMBER      			2
+#define T_LABEL      			4
+#define T_ADDRESS		     	8
+#define T_OFFSET       			16
+
 
 extern  std::map<std::string, op_t> op_tab;
 

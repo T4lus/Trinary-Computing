@@ -43,18 +43,23 @@ public:
 	void buildCode();
 	void debug();
 
-	static int parseRegister(std::string value);
-	static int parseAddress(std::string value);
+	static int parseAddress(std::string);
+
+	static bool isRegister(std::string);
+	static int getRegisterType(std::string);
+	static Tryte parseRegister(std::string, Tryte);
 
 	static int getValue(std::string, maps_t);
+	
+	
 	static void checkNbArg(std::vector<std::string> _opMap);
+	static std::vector<args_type_t> getArgType(std::vector<std::string>);
+	static std::vector<Tryte> getValues(std::vector<std::string>, std::vector<args_type_t>, maps_t);
 
-	static std::vector<args_type_t> GetArgType(std::vector<std::string>);
-	static Tryte GetRegisterAddress(std::string);
 
 	static std::vector<Tryte> HLT(std::vector<std::string>, maps_t);
 	static std::vector<Tryte> NOP(std::vector<std::string>, maps_t);	
-	static std::vector<Tryte> LOAD(std::vector<std::string>, maps_t);
+	static std::vector<Tryte> MOV(std::vector<std::string>, maps_t);
 
 	static std::vector<Tryte> DT(std::vector<std::string>, maps_t);
 	static std::vector<Tryte> DW(std::vector<std::string>, maps_t);

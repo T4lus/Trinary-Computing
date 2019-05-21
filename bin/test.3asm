@@ -7,23 +7,23 @@ hello:
     DT 0						# String terminator
 
 start:
-	LOAD rc, hello    			# Point to var 
-	LOAD rd, 3xC00				# Point to output
+	MOV cx, hello    			# Point to var 
+	MOV dx, 3xC00				# Point to output
 	CALL print
     HLT	             		# Stop execution
 
 print:							# print(C:*from, D:*to)
-	PUSH ra
-	PUSH rb
-	LOAD rb, 0
+	PUSH ax
+	PUSH bx
+	MOV bx, 0
 .loop:
-	LOAD ra, @rc				# Get char from var
-	LOAD @rd, ra				# Write to output
-	INC rc
-	INC rd  
-	CMP rb, @rc					# Check if end
+	MOV al, @cx				# Get char from var
+	MOV @dx, al				# Write to output
+	INC cx
+	INC dx  
+	CMP bx, @rx					# Check if end
 	JNZ .loop					# jump if not
 
-	POP rb
-	POP ra
+	POP bx
+	POP ax
 	RET

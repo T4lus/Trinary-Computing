@@ -9,7 +9,7 @@ std::map<std::string, op_t> op_tab = {
 	
 	{"NOP", {"NOP", 0, {}, 0, &Parser::NOP}},
 
-	{"LOAD", {"LOAD", 2, {}, 1, &Parser::LOAD}},
+	{"MOV", {"MOV", 2, {}, 1, &Parser::MOV}},
 	
 	{"DT", {"DT",  1, {}, 10, &Parser::DT}},
 	{"DW", {"DW",  1, {}, 11, &Parser::DW}},

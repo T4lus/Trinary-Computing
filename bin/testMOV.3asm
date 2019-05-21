@@ -1,0 +1,19 @@
+
+wordmov:
+MOV ax, bx          # DST: reg - word | SRC: reg - word
+MOV ax, @bx         # DST: reg - word | SRC: reg - address
+MOV ax, @bx+4       # DST: reg - word | SRC: reg - address - offset
+
+MOV ax, 3xD10       # DST: reg - word | SRC: number
+MOV ax, @3xD10      # DST: reg - word | SRC: address - number
+MOV ax, @3xD10+4    # DST: reg - word | SRC: address - number - offset 
+
+trytemov:
+MOV al, bh          # DST: reg - tryte | SRC: reg - word
+MOV al, 3xD10       # DST: reg - tryte | SRC: number
+MOV al, @bx         # DST: reg - tryte | SRC: reg - offset
+MOV al, @3xD10      # DST: reg - tryte | SRC: address - number
+MOV al, @bx+4       # DST: reg - tryte | SRC: address - reg - offset
+MOV al, @3xD10+4    # DST: reg - tryte | SRC: address - number - offset 
+
+

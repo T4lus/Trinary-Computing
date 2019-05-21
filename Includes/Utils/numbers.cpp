@@ -50,6 +50,12 @@ bool isHex(std::string s) {
   return s.compare(0, 2, "0x") == 0 && s.size() > 2 && s.find_first_not_of("0123456789abcdefABCDEF", 2) == std::string::npos;
 }
 
+bool isNumber(std::string s) {
+    if (isInteger(s) || isHex(s) || isHept(s))
+        return true;
+    return false;
+}
+
 int getNumber(std::string str) {
 	if (isHex(str))
 		return strtoul(str.c_str(), NULL, 16);
