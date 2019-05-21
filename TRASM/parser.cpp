@@ -91,15 +91,12 @@ void Parser::buildSizeMap() {
 				}
 				else {
 					std::vector<args_type_t> argType = getArgType({op[2]});
-					if (argType[0] & T_REGISTER) {
+					if (argType[0] & T_REGISTER) 
 						currentSize += 1;
-						if (argType[0] & T_OFFSET) currentSize += 3;
-					}
+					else if (argType[0] & T_NUMBER || argType[0] & T_LABEL)
+						currentSize += 3;
 
-					if (argType[0] & T_NUMBER || argType[0] & T_LABEL) {
-						currentSize += 1;
-						if (argType[0] & T_OFFSET) currentSize += 3;
-					}
+					if (argType[0] & T_OFFSET) currentSize += 3;
 				}
 			}
 			else {
