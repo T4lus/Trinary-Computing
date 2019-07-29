@@ -22,7 +22,7 @@ DEL     .EQU    7FH             ; Delete
 
 ; BASIC WORK SPACE LOCATIONS
 
-WRKSPC  .EQU    2045H                ; BASIC Work space
+WRKSPC  .EQU    4090H                ; BASIC Work space
 USR     .EQU    WRKSPC+3H            ; "USR (x)" jump
 OUTSUB  .EQU    WRKSPC+6H            ; "OUT p,n"
 OTPORT  .EQU    WRKSPC+7H            ; Port (p)
@@ -111,7 +111,7 @@ MO      .EQU    24H             ; Missing operand
 HX      .EQU    26H             ; HEX error
 BN      .EQU    28H             ; BIN error
 
-        .ORG    00150H
+        .ORG    02000H
 
 COLD:   JP      STARTB          ; Jump for cold start
 WARM:   JP      WARMST          ; Jump for warm start

@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
 	std::cout << std::endl;
 	std::cout << "Tryte ++ test : " << std::endl;
 	
-	t_test = 1093;
+	t_test = 0;
 	std::cout << t_test.str() << " : " << t_test.to_int() << " : " << dechept(t_test.to_int()) << std::endl;
 
 	Tryte tr_test = heptdec("000");

@@ -25,7 +25,7 @@ int Parser::parse() {
 	std::ifstream infile(this->inFile.c_str());
 	while (std::getline(infile, line)) {
 		lineNumber++;
-		line = line.substr(0, line.find("#"));
+		line = line.substr(0, line.find(TOKEN_COMMENT));
 		chomp(line);
 
 		if (line == "")
