@@ -53,6 +53,7 @@ namespace opcodes {
         
         INC_REG = 60,
         DEC_REG = 61,
+        
         ADD_REG_TO_REG = 70,
         ADD_REGADDRESS_TO_REG = 71,
         ADD_ADDRESS_TO_REG = 72,

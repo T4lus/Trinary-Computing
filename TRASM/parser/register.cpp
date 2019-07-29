@@ -3,46 +3,16 @@
 
 #include "../parser.h"
 
-std::map<int, std::map<std::string, int>> trinium_register = {
-    {
-        -1, {
-            {"ah",   1}, {"am",   2}, {"al",   3},
-            {"bh",   4}, {"bm",   5}, {"bl",   6},
-            {"ch",   7}, {"cm",   8}, {"cl",   9},
-            {"dh",  10}, {"dm",  11}, {"dl",  12},
-
-            {"eh",  -1}, {"em",  -2}, {"el",  -3},
-            {"fh",  -4}, {"fm",  -5}, {"fl",  -6},
-            {"gh",  -7}, {"gm",  -8}, {"gl",  -9},
-            {"hh", -10}, {"hm", -11}, {"hl", -12} 
-        }
-    },
-    {
-        0, {
-            {"hx", -4},
-            {"gx", -3},
-            {"fx", -2},
-            {"ex", -1},
-            
-            {"ax",  1},	
-            {"bx",  2},
-            {"cx",  3},
-            {"dx",  4},
-        }
-    }
-};
-
-
 std::map<std::string, int> tryte_register_tab = {
-	{"ah",   1}, {"am",   2}, {"al",   3},
+	{"hh", -10}, {"hm", -11}, {"hl", -12},
+    {"gh",  -7}, {"gm",  -8}, {"gl",  -9},
+    {"fh",  -4}, {"fm",  -5}, {"fl",  -6},
+    {"eh",  -1}, {"em",  -2}, {"el",  -3},
+
+    {"ah",   1}, {"am",   2}, {"al",   3},
     {"bh",   4}, {"bm",   5}, {"bl",   6},
     {"ch",   7}, {"cm",   8}, {"cl",   9},
-    {"dh",  10}, {"dm",  11}, {"dl",  12},
-
-    {"eh",  -1}, {"em",  -2}, {"el",  -3},
-    {"fh",  -4}, {"fm",  -5}, {"fl",  -6},
-    {"gh",  -7}, {"gm",  -8}, {"gl",  -9},
-    {"hh", -10}, {"hm", -11}, {"hl", -12},
+    {"dh",  10}, {"dm",  11}, {"dl",  12}, 
 };
 
 std::map<std::string, int> word_register_tab = {
@@ -57,6 +27,11 @@ std::map<std::string, int> word_register_tab = {
 	{"dx",  4},
 };
 
+std::map<int, std::map<std::string, int>> trinium_register = {
+    {-1, tryte_register_tab},
+    { 0, word_register_tab}
+};
+
 std::map<std::string, int> register_tab = {
 	{"ra", 0},	
 	{"rb", 1},
@@ -67,8 +42,8 @@ std::map<std::string, int> register_tab = {
 	{"ip", 5},		//instruction pointer
 	{"lr", 6},		//link register
 
-	{"n2", 7},	//@TODO
-	{"n3", 8},	//@TODO
+	{"n2", 7},	    //@TODO
+	{"n3", 8},	    //@TODO
 };
 
 #define T_REGISTER_TRYTE               -1

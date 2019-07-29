@@ -10,7 +10,7 @@ enum opMapCol {
     arg4
 };
 
-typedef char    								args_type_t;
+typedef int    								args_type_t;
 typedef std::vector<std::vector<std::string>> 	map_t;
 
 typedef struct op_value_s {

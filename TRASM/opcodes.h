@@ -26,7 +26,7 @@
 
 // #define T_REGISTER				1
 // #define T_REGISTER_ADDRESS     	2
-// #define T_ADDRESS       		4
+// #define T_ADDRESS       			4
 // #define T_NUMBER      			8
 
 #define T_REGISTER_ADDRESS
